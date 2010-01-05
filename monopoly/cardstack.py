@@ -23,3 +23,10 @@ class CardStack(object):
     def return_gojfc(self, player):
         self.used_cards.append(player.gojfc.pop())
         
+
+class Card(object):
+    def __init__(self, data):
+        self.id = data[0]
+        self.text = data[1]
+        self.is_gojfc = data[2]
+        
