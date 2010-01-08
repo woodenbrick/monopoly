@@ -2,18 +2,40 @@
 
 class Square(object):
     
-    def __init__(self, id, name, set=None):
+    def __init__(self, id, name, coords, set=None):
+        """coords is a list of x1, x2, y1, y2 coordinates for this square"""
         self.id = id
         self.name = name
+        self.coords = coords
+        self.centre = [(coords[0] + coords[1]) / 2, (coords[2] + coords[3] / 2)]
         self.set = set
+    
+    def get_placement(self, player_list):
+        """Gets the centre of this square, where we will place the token.
+        if this area is already taken we will adjust the tokens and return a
+        new placement"""
+        adjustments = []
+        space_taken = 0
+        for player in player_list:
+            if player.current_square == self:
+                #add to adjustment list
+                adjustments.append(player)
+                space_taken += player.counter.width
+        #if len(adjustments) == 0:
+        #XXX currently just always places counter in centre
+        return self.centre
+
+            
+            
+        
     
     
 class Property(Square):
     
-    def __init__(self, id, name, price, set, rent_list):
+    def __init__(self, id, name, coords, price, set, rent_list):
         """rent_list is [base_rent, 1 house, 2 houses etc.]
         for railroads/utilities it will just be the base rent"""
-        Square.__init__(self, id, name, set)
+        Square.__init__(self, id, name, coords, set)
         self.owner = None
         self.purchase_price = price
         self.is_mortgaged = False
@@ -43,8 +65,8 @@ class Property(Square):
 
 class Street(Property):
     
-    def __init__(self, id, name, price, set, rent_list, house_cost):
-        Property.__init__(self, id, name, price, set, rent_list)
+    def __init__(self, id, name, coords, price, set, rent_list, house_cost):
+        Property.__init__(self, id, name, coords, price, set, rent_list)
         self.house_cost = house_cost
         self.houses = 0
     
@@ -67,8 +89,8 @@ class Street(Property):
 
 class Utility(Property):
     
-    def __init__(self, id, name, price, set):
-        Property.__init__(self, id, name, price, set)
+    def __init__(self, id, name, coords, price, set):
+        Property.__init__(self, id, name, coords, price, set)
         
     def return_rent(self, payer):
         if self.owner.properties_in_set_owned(self) == 1:
@@ -78,8 +100,8 @@ class Utility(Property):
         
 class Railroad(Property):
     
-    def __init__(self, id, name, price, set):
-        Property.__init__(self, id, name, price, set)
+    def __init__(self, id, name, coords, price, set):
+        Property.__init__(self, id, name, coords, price, set)
         
     def return_rent(self):
         multipler = [1, 2, 4, 8]
