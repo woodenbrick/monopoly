@@ -1,0 +1,6 @@
+This directory will have the following subdirectories:
+counters: At least 8 counters of approximatly the same size (around 50px * 50px should be sufficent) eg. counters/hat.png
+locale: We will store different versions of title deed cards in here, named after their id number in the database. eg. images/locale/UK/3.png for whitechapel road. Also stored in here will be the board image; as high resolution as possible, should be saved as board.png
+minideeds: We will store minature versions of the title deed cards in here, basically they just need a colour line at the top to differenciate sets, it doesnt need to have any writing on it. Store according to set name eg. images/locale/minideeds/LB.png 
+ 
+
