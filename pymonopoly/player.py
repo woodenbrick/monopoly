@@ -41,7 +41,7 @@ class Player(object):
             #XXX move to jail square
             pass
         else:
-            self.board.return_destination_square(self)
+            self.board.move_counter(self)
     
     def pay(self, amount, player=None):
         """Return True if money was paid"""
@@ -58,6 +58,10 @@ class Player(object):
         """If other_player is set to None then the offer is made to all players
         but all player2 properties will be ignored apart from cash"""
         pass
+    
+    def go_to_jail(self):
+        self.in_jail = True
+        #XXX send token to jail square
     
     def has_set(self, property):
         set = self.board.get_set_by_property(property)
