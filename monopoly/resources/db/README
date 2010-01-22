@@ -1,5 +1,5 @@
 sqlite Databases for each locale will be created in here.
-The should be named according to their locale eg. UK, US, AUS etc.
+They should be named according to their locale eg. UK.sqlite, US.sqlite, AUS.sqlite etc.
 The tables in each database will be as follows:
 
 settings
@@ -16,10 +16,10 @@ squares
 2. chance/community_chest tables
 `id` int #numeric id of card
 `text` text # text on the card
-`is_gojfc` boolean # True if this is a Get out of jail free card
-`str_rep` int #Set to 0 if this is not a street repairs card otherwise set the cost per house.
+`isGojfc` boolean # True if this is a Get out of jail free card
+`streetRepairs` int #Set to 0 if this is not a street repairs card otherwise set the cost per house.
 `money` int # A signed amount +recieved/-paid or 0 if there is no payment involved. In the case of Street repairs this will be the cost per hotel. 
-`player_trans`  boolean # True if player is paying/recieving from other players.
+`playerTrans`  boolean # True if player is paying/recieving from other players.
 `square` int # A square id to move to or -1 if they should not move. The square id for jail is 10
 
 Example rows from this table might look like:
