@@ -15,48 +15,68 @@ public:
 };
 
 
+class Set
+{
+    Property *set[];
+};
 
-class Property : Square
+class Property : public Square
 {
     int purchasePrice;
-    Player owner;
+    Player *owner;
     bool isMortgaged;
     QString set;
 
 public:
-    purchase(Player player);
+    Property(int purchasePrice, QString set);
+    bool purchase(Player *player);
     void mortgage();
-    void unmortgage();
+    bool unmortgage();
 
 };
 
 
-class Street : Property
+
+class Street : public Property
 {
-    int baseRent;
-    int rent1;
-    int rent2;
-    int rent3;
-    int rent4;
-    int rent5;
+    int *rent[];
+    int houseCost;
     int houses;
 
 public:
-    void buyHouses(int amount);
+    Street(int rent[]);
+    bool buyHouses(int amount);
     void sellHouses(int amount);
     int returnRent();
 };
 
-class Railway : Property
+class HouseSet
 {
+    Street *set[];
+
 public:
+    HouseSet(Street *set[]);
+    bool canAddHouse(Street *street);
+    bool canRemoveHouse(Street *street);
+
+};
+
+class Railway : public Property
+{
+    int rent;
+    int multiplier[];
+public:
+    Railway(int rent);
     int returnRent();
 };
 
 
-class Utility : Property
+class Utility : public Property
 {
+    int rent;
+
 public:
+    Utility(int rent);
     int returnRent(int lastRoll);
 };
 
