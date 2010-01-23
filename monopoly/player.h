@@ -41,7 +41,8 @@ public:
     Set propertiesInSetOwned(const Property *prop);
     void confirmHousePurchases();
     void addHouse();
-    int [] returnHouseHotelCount();
+    int returnHouseCount();
+    int returnHotelCount();
     int getMoney();
     void makePayment(int amount);
     void receivePayment(int amount);

@@ -6,24 +6,26 @@ class Player;
 
 class Square
 {
+protected:
     int id;
     QString name;
 
 public:
-    Square(int id, QString name);
+    Square(int &id, QString &name);
 
 };
 
 
 class Property : public Square
 {
+protected:
     int purchasePrice;
-    Player *owner;
     bool isMortgaged;
     QString set;
 
 public:
-    Property(int id, QString name, int purchasePrice, QString set);
+    Property(int &id, QString &name, int &purchasePrice, QString &set);
+    Player *owner;
     bool purchase(Player *player);
     //Player *getOwner();
     void mortgage();
@@ -35,12 +37,13 @@ public:
 
 class Street : public Property
 {
-    int *rent[];
+    int rent[];
     int houseCost;
-    int houses;
+
 
 public:
-    Street(int id, QString name, int purchasePrice, QString set, int rent[]);
+    int houses;
+    Street(int &id, QString &name, int &purchasePrice, QString &set, int rent[]);
     bool buyHouses(int amount);
     void sellHouses(int amount);
     int returnRent();

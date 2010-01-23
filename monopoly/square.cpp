@@ -1,7 +1,7 @@
 #include "square.h"
 #include "player.h"
 
-Square::Square(int id, QString name)
+Square::Square(int &id, QString &name)
 {
     this->id = id;
     this->name = name;
@@ -11,7 +11,7 @@ Square::Square(int id, QString name)
 
 
 
-Property::Property(int id, QString name, int purchasePrice, QString set) : Square(id, name)
+Property::Property(int &id, QString &name, int &purchasePrice, QString &set) : Square(id, name)
 {
     this->purchasePrice = purchasePrice;
     this->set = set;
@@ -27,11 +27,6 @@ bool Property::purchase(Player *purchaser)
         return true;
     }
     return false;
-}
-
-Player Property::getOwner()
-{
-    return *owner;
 }
 
 
@@ -57,10 +52,10 @@ bool Property::unmortgage()
 
 
 
-Street::Street(int id, QString name, int purchasePrice, QString set, int *rent[]) : Property(purchasePrice, set),
-Square(id, name)
+Street::Street(int &id, QString &name, int &purchasePrice, QString &set, int rent[]) : Property(id, name, purchasePrice, set)
 {
-    this->rent = rent;
+    //this->rent[0] = rent;
+    this->rent = [0, 20];
 
 }
 
@@ -85,23 +80,23 @@ int Street::returnRent()
     {
         if(houses == 0)
         {
-            return &rent[0] * 2;
+            return rent[0] * 2;
         }
         else
         {
-            return &rent[&houses];
+            return rent[houses];
         }
     }
     else
     {
-        return &rent[0];
+        return rent[0];
     }
 }
 
 
 
 
-HouseSet::HouseSet(Street *set[])
+HouseSet::HouseSet(Street set[])
 {
     this->set = set;
 }
@@ -143,8 +138,7 @@ bool HouseSet::canRemoveHouse(Street *street)
 
 
 
-Railway::Railway(int id, QString name, int purchasePrice, QString set, int rent) : Property(purchasePrice, set),
-Square(id, name)
+Railway::Railway(int id, QString name, int purchasePrice, QString set, int rent) : Property(purchasePrice, set)
 {
     this->rent = rent;
     multiplier = [1, 2, 4, 8];
@@ -159,10 +153,10 @@ int Railway::returnRent()
 
 
 
-Utility::Utility(int id, QString name, int purchasePrice, QString set, int rent) : Property(purchasePrice, set),
-Square(id, name)
+Utility::Utility(int id, QString name, int purchasePrice, QString set, int rent) : Property(purchasePrice, set)
 {
     this->rent = rent;
+    multiplier = 2;
 }
 
 
