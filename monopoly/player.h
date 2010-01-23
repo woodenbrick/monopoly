@@ -5,10 +5,11 @@
 #include <QImage>
 #include "square.h"
 #include "gui/playerframe.h"
+#include "card.h"
 
-struct purchaseTracker
+class PurchaseTracker
 {
-    Property *property;
+    Property *property[];
     int houses;
 };
 
@@ -22,19 +23,19 @@ private:
     int money;
     Card[] *gojfc;
     bool inJail;
-    Property [] *sets //not sure if this is required
-    purchaseTracker currentPurchases;
-    QImage *counter;
+    Property [] *sets; //not sure if this is required
+    PurchaseTracker currentPurchases;
+    QImage counter;
     PlayerFrame *playerFrame;
 
 
 public:
-    Player(QString name, Square *currentSquare, int money, QImage *counter);
-    void makeOffer(Player *player2, int payment, Property *properties[], Card *gojfc[],
-                   int paymentPlayer2, Property *propertiesPlayer2[], Card *gojfcPlayer2[]);
+    Player(QString name, Square &currentSquare, int money, QString counter);
+    void makeOffer(Player &player2, int payment, Property &properties[], Card &gojfc[],
+                   int paymentPlayer2, Property &propertiesPlayer2[], Card &gojfcPlayer2[]);
     bool hasSet();
-    Property[] propertiesInSetOwned(QString set);
-    Property[] propertiesInSetOwned(Property);
+    Property[] propertiesInSetOwned(const QString set);
+    Property[] propertiesInSetOwned(const &Property);
     void confirmHousePurchases();
     void addHouse();
     int [] returnHouseHotelCount();
