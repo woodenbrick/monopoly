@@ -4,20 +4,6 @@
 #include <QString>
 #include "player.h"
 
-class CardStack
-{
-    Card *deck[];
-    Card *usedCards[];
-    shuffle();
-
-public:
-    CardStack(QString cardData[][]);
-    void pickup(Player *player);
-    void returnGojfc(Card card);
-
-};
-
-
 class Card
 {
     int id;
@@ -30,6 +16,21 @@ class Card
 
 public:
     Card(QString cardData[]);
+};
+
+
+class CardStack
+{
+    Card *deck[];
+    Card *usedCards[];
+    void shuffle();
+
+public:
+    CardStack();
+    void addToStack(Card card);
+    void pickup(Player &player);
+    void returnGojfc(Card card);
+
 };
 
 #endif // CARD_H
