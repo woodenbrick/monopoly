@@ -1,4 +1,4 @@
-#include "playerframe.h"
+#include "gui/playerframe.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

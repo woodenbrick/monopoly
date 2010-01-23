@@ -15,11 +15,6 @@ public:
 };
 
 
-class Set
-{
-    Property *set[];
-};
-
 class Property : public Square
 {
     int purchasePrice;
@@ -30,6 +25,7 @@ class Property : public Square
 public:
     Property(int purchasePrice, QString set);
     bool purchase(Player *player);
+    Player getOwner();
     void mortgage();
     bool unmortgage();
 
@@ -53,6 +49,7 @@ public:
 class HouseSet
 {
     Street *set[];
+    friend class HouseSet;
 
 public:
     HouseSet(Street *set[]);

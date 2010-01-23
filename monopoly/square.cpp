@@ -19,29 +19,34 @@ Property::Property(int id, QString name, int purchasePrice, QString set) : Squar
 
 bool Property::purchase(Player *purchaser)
 {
-    if(purchaser->money >= purchasePrice)
+    if(purchaser->getMoney() >= purchasePrice)
     {
-        purchaser->money -= purchasePrice;
+        purchaser->makePayment(purchasePrice);
         owner = purchaser;
         return true;
     }
     return false;
 }
 
+Player Property::getOwner()
+{
+    return *owner;
+}
 
-bool Property::mortgage()
+
+void Property::mortgage()
 {
 
-    owner->money += purchasePrice / 2;
+    owner->receivePayment(purchasePrice / 2);
     isMortgaged = true;
 }
 
 
 bool Property::unmortgage()
 {
-    if(owner->money >= purchasePrice / 2)
+    if(owner->getMoney() >= purchasePrice / 2)
     {
-        owner->money -= purchasePrice / 2;
+        owner->makePayment(purchasePrice / 2);
         isMortgaged = false;
         return true;
     }
@@ -55,19 +60,20 @@ Street::Street(int id, QString name, int purchasePrice, QString set, int *rent[]
 Square(id, name)
 {
     this->rent = rent;
+
 }
 
 
 bool Street::buyHouses(int amount)
 {
-    owner->money -= houseCost * amount;
+    owner->makePayment(houseCost * amount);
     houses += amount;
 }
 
 
 void Street::sellHouses(int amount)
 {
-    owner->money += houseCost / 2 * amount;
+    owner->receivePayment(houseCost / 2 * amount);
     houses -= amount;
 }
 
@@ -78,16 +84,16 @@ int Street::returnRent()
     {
         if(houses == 0)
         {
-            return rent[0] * 2;
+            return &rent[0] * 2;
         }
         else
         {
-            return rent[houses];
+            return &rent[&houses];
         }
     }
     else
     {
-        return rent[0];
+        return &rent[0];
     }
 }
 
@@ -111,7 +117,7 @@ bool HouseSet::canAddHouse(Street *street)
         }
     }
     //check owner has money
-    if(! street->owner->money >= street->houseCost)
+    if(! street->owner->getMoney() >= street->houseCost)
     {
         return false;
     }

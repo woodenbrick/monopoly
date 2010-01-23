@@ -9,7 +9,8 @@
 
 class PurchaseTracker
 {
-    Property *property[];
+public:
+    Property[] *property;
     int houses;
 };
 
@@ -39,6 +40,9 @@ public:
     void confirmHousePurchases();
     void addHouse();
     int [] returnHouseHotelCount();
+    int getMoney();
+    void makePayment(int amount);
+    void receivePayment(int amount);
 
 };
 
