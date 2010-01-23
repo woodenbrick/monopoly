@@ -2,7 +2,7 @@
 #define SQUARE_H
 
 #include <QString>
-#include "player.h"
+class Player;
 
 class Square
 {
@@ -23,9 +23,9 @@ class Property : public Square
     QString set;
 
 public:
-    Property(int purchasePrice, QString set);
+    Property(int id, QString name, int purchasePrice, QString set);
     bool purchase(Player *player);
-    Player getOwner();
+    //Player *getOwner();
     void mortgage();
     bool unmortgage();
 
@@ -40,7 +40,7 @@ class Street : public Property
     int houses;
 
 public:
-    Street(int rent[]);
+    Street(int id, QString name, int purchasePrice, QString set, int rent[]);
     bool buyHouses(int amount);
     void sellHouses(int amount);
     int returnRent();
@@ -49,7 +49,7 @@ public:
 class HouseSet
 {
     Street *set[];
-    friend class HouseSet;
+    friend class Street;
 
 public:
     HouseSet(Street *set[]);
@@ -63,7 +63,7 @@ class Railway : public Property
     int rent;
     int multiplier[];
 public:
-    Railway(int rent);
+    Railway(int id, QString name, int purchasePrice, QString set, int rent);
     int returnRent();
 };
 
@@ -71,9 +71,10 @@ public:
 class Utility : public Property
 {
     int rent;
+    int multiplier;
 
 public:
-    Utility(int rent);
+    Utility(int id, QString name, int purchasePrice, QString set, int rent);
     int returnRent(int lastRoll);
 };
 

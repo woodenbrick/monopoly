@@ -1,4 +1,5 @@
 #include "square.h"
+#include "player.h"
 
 Square::Square(int id, QString name)
 {

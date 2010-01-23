@@ -18,7 +18,7 @@ private:
 
 #endif // PLAYERFRAME_H
 
-class OtherPlayerFrame : public QGroupBox, public PlayerFrame
+class OtherPlayerFrame : public QGroupBox, virtual public PlayerFrame
 {
 public:
     OtherPlayerFrame(QMainWindow *parent, QString name);
