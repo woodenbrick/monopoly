@@ -60,7 +60,7 @@ QString CardStack::pickup(Player *player, std::vector<Player> *otherPlayers)
             }
             else
             {
-                otherPlayers->at(i)->createDebt(currentCard.money, player);
+                otherPlayers->at(i).createDebt(*currentCard.money, &player);
             }
         }
     }
@@ -113,7 +113,7 @@ QString CardStack::pickup(Player *player, std::vector<Player> *otherPlayers)
 }
 
 
-CardStack::returnGojfc(Card card)
+void CardStack::useGojfc(Card &card)
 {
     this->usedCards.push_back(card);
 }

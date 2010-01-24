@@ -8,6 +8,7 @@
 
 class Card
 {
+    friend class CardStack;
     int id;
     QString text;
     bool isGojfc;
@@ -35,8 +36,8 @@ public:
     CardStack(std::vector<Card> deck);
     void shuffle();
     void addToStack(Card card);
-    QString pickup(Player *player);
-    void returnGojfc(Card card);
+    QString pickup(Player *player, std::vector<Player> *otherPlayers);
+    void useGojfc(Card &card);
 
 };
 

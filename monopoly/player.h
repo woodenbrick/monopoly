@@ -47,10 +47,10 @@ public:
     int returnHouseCount();
     int returnHotelCount();
     int getMoney();
-    void createDebt(int amount, Player *player);
+    void createDebt(int amount, Player &player);
     void createDebt(int amount);
-    void addGojfc(Card *card);
-    void removeGojfc(CardStack *stack);
+    void addGojfc(Card &card);
+    void removeGojfc(CardStack &stack);
     void makePayment(int amount);
     void receivePayment(int amount);
     void move(int squareId);
