@@ -2,22 +2,25 @@
 #define BOARD_H
 
 #include <QString>
+#include <vector>
 #include "square.h"
 #include "card.h"
 #include "player.h"
 
 class Board
 {
-    Square *square[];
+    std::vector<Square> square;
     CardStack *communityChest;
     CardStack *chance;
-    Player *players[];
+
 
 public:
+    std::vector<Player> players;
     Board(QString locale);
     Square getSquare(int id);
-    Set getSet(int id);
-    Set getSet(Property property);
+    HouseSet getSet(int id);
+    HouseSet getSet(Property property);
+    std::vector<Player> *returnOtherPlayers(Player *player);
 };
 
 
