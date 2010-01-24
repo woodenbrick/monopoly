@@ -31,7 +31,7 @@ Example rows from this table might look like:
 Each row in this table will refer to a square on the board
 `id` int #numeric id of the square (0 for go then up to 39 for Mayfair. Jail/Just visiting is one square)
 `name` varchar #The name of the square ie. 'Mayfair', 'Jail'
-`_set` varchar #The set it belongs to (ie its colour/group). one of None|B|LB|P|O|R|Y|G|DB|RR|UT
+`set` varchar #The set it belongs to (ie its colour/group). one of None|B|LB|P|O|R|Y|G|DB|RR|UT
 `price` int #Price or 0 if this square is not purchasable
 
 4. The streets table
