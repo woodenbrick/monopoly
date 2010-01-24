@@ -4,6 +4,7 @@
 #include <QString>
 #include "player.h"
 
+
 class Card
 {
     int id;
@@ -15,7 +16,8 @@ class Card
     int square; //a square to move to or -1 if not moving.
 
 public:
-    Card(QString cardData[]);
+    Card(int id, QString text, bool isGojfc, int streetRepairs, int money,
+         bool playerTransfer, int square);
 };
 
 
