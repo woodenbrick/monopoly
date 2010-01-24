@@ -16,9 +16,9 @@ private:
 
 };
 
-#endif // PLAYERFRAME_H
 
-class OtherPlayerFrame : public QGroupBox, virtual public PlayerFrame
+
+class OtherPlayerFrame : public PlayerFrame
 {
 public:
     OtherPlayerFrame(QMainWindow *parent, QString name);
@@ -26,3 +26,5 @@ public:
 private:
     QPushButton *button;
 };
+
+#endif // PLAYERFRAME_H

@@ -1,6 +1,8 @@
 #include "gui/playerframe.h"
 #include <QApplication>
-
+#include "player.h"
+#include "card.h"
+#include "square.h"
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

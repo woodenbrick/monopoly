@@ -2,6 +2,8 @@
 #define SQUARE_H
 
 #include <QString>
+#include <vector>
+
 class Player;
 
 class Square
@@ -33,17 +35,19 @@ public:
 
 };
 
-
+class HouseSet;
 
 class Street : public Property
 {
-    int rent[];
+    friend class HouseSet;
+protected:
+    std::vector <int> rent;
     int houseCost;
 
 
 public:
     int houses;
-    Street(int &id, QString &name, int &purchasePrice, QString &set, int rent[]);
+    Street(int &id, QString &name, int &purchasePrice, QString &set, std::vector <int> rent);
     bool buyHouses(int amount);
     void sellHouses(int amount);
     int returnRent();
@@ -51,11 +55,11 @@ public:
 
 class HouseSet
 {
-    Street *set[];
+    std::vector<Street> propSet;
     friend class Street;
 
 public:
-    HouseSet(Street *set[]);
+    HouseSet(std::vector<Street> set);
     bool canAddHouse(Street *street);
     bool canRemoveHouse(Street *street);
 
@@ -64,7 +68,7 @@ public:
 class Railway : public Property
 {
     int rent;
-    int multiplier[];
+    std::vector<int> multiplier;
 public:
     Railway(int id, QString name, int purchasePrice, QString set, int rent);
     int returnRent();

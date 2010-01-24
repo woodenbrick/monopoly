@@ -7,7 +7,7 @@
 class Card;
 class Square;
 class Property;
-class Set;
+
 
 class PurchaseTracker
 {
@@ -37,8 +37,8 @@ public:
     void makeOffer(Player *player2, int payment, Property *properties[], Card *gojfc[],
                    int paymentPlayer2, Property *propertiesPlayer2[], Card *gojfcPlayer2[]);
     bool hasSet();
-    Set propertiesInSetOwned(const QString setName);
-    Set propertiesInSetOwned(const Property *prop);
+    int propertiesInSetOwned(const QString setName);
+    int propertiesInSetOwned(const Property *prop);
     void confirmHousePurchases();
     void addHouse();
     int returnHouseCount();
