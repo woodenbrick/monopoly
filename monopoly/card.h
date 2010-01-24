@@ -2,6 +2,7 @@
 #define CARD_H
 
 #include <QString>
+#include <vector>
 #include "player.h"
 
 
@@ -13,24 +14,28 @@ class Card
     int streetRepairs; //set to 0 if not street repairs otherwise it is the amount per house
     int money; //a payment to be made (- pay, + receive) or the cost of street repairs per hotel
     bool playerTransfer; //true if money should be transfered between players
-    int square; //a square to move to or -1 if not moving.
-
+    int square; //a square to move to or -1 if not moving. -2 for special cases (move to next railroad, go back 3 spaces
+    
+    
 public:
     Card(int id, QString text, bool isGojfc, int streetRepairs, int money,
          bool playerTransfer, int square);
+
 };
 
 
 class CardStack
 {
-    Card *deck[];
-    Card *usedCards[];
-    void shuffle();
+    std::vector<Card> deck;
+    std::vector<Card> usedCards;
+    std::vector<Card>::iterator iter;
+    void addToDiscardPile(Card card);
 
 public:
-    CardStack();
+    CardStack(std::vector<Card> deck);
+    void shuffle();
     void addToStack(Card card);
-    void pickup(Player &player);
+    QString pickup(Player *player);
     void returnGojfc(Card card);
 
 };
