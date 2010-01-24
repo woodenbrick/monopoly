@@ -4,7 +4,9 @@
 #include <QString>
 #include <QImage>
 #include "gui/playerframe.h"
+#include <vector>
 class Card;
+class CardStack;
 class Square;
 class Property;
 
@@ -24,12 +26,13 @@ private:
     Square *currentSquare;
     Property *properties[];
     int money;
-    Card *gojfc[];
+    std::vector<Card> gojfc;
     bool inJail;
     Property *sets[]; //not sure if this is required
     PurchaseTracker currentPurchases;
     QImage counter;
     PlayerFrame *playerFrame;
+    void moveForward(Square nextPoint);
 
 
 public:
@@ -44,8 +47,19 @@ public:
     int returnHouseCount();
     int returnHotelCount();
     int getMoney();
+    void createDebt(int amount, Player *player);
+    void createDebt(int amount);
+    void addGojfc(Card *card);
+    void removeGojfc(CardStack *stack);
     void makePayment(int amount);
     void receivePayment(int amount);
+    void move(int squareId);
+    void move(Square destination);
+    void moveToNearestRailroad();
+    void moveToNearestUtility();
+    void moveBack3Spaces();
+    void sendToJail();
+
 
 
 };
