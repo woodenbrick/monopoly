@@ -5,7 +5,7 @@
 #include <QtGui>
 
 class PlayerFrame : public QGroupBox
-{
+{    
 public:
     PlayerFrame(QMainWindow *parent, QString name);
     void setCash(int cash);
@@ -16,15 +16,15 @@ private:
 
 };
 
-#endif // PLAYERFRAME_H
 
-class OtherPlayerFrame : public QGroupBox, public PlayerFrame
+
+class OtherPlayerFrame : public PlayerFrame
 {
 public:
     OtherPlayerFrame(QMainWindow *parent, QString name);
-    makeOffer();
+    void makeOffer();
 private:
     QPushButton *button;
-private slots:
-    connect(button, SIGNAL(clicked()), this, SLOT(makeOffer()));
 };
+
+#endif // PLAYERFRAME_H

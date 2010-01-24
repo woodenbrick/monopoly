@@ -2,49 +2,52 @@
 #define SQUARE_H
 
 #include <QString>
-#include "player.h"
+#include <vector>
+
+class Player;
 
 class Square
 {
+protected:
     int id;
     QString name;
 
 public:
-    Square(int id, QString name);
+    Square(int &id, QString &name);
 
 };
 
-
-class Set
-{
-    Property *set[];
-};
 
 class Property : public Square
 {
+protected:
     int purchasePrice;
-    Player *owner;
     bool isMortgaged;
     QString set;
 
 public:
-    Property(int purchasePrice, QString set);
+    Property(int &id, QString &name, int &purchasePrice, QString &set);
+    Player *owner;
     bool purchase(Player *player);
+    //Player *getOwner();
     void mortgage();
     bool unmortgage();
 
 };
 
-
+class HouseSet;
 
 class Street : public Property
 {
-    int *rent[];
+    friend class HouseSet;
+protected:
+    std::vector <int> rent;
     int houseCost;
-    int houses;
+
 
 public:
-    Street(int rent[]);
+    int houses;
+    Street(int &id, QString &name, int &purchasePrice, QString &set, std::vector <int> rent);
     bool buyHouses(int amount);
     void sellHouses(int amount);
     int returnRent();
@@ -52,10 +55,11 @@ public:
 
 class HouseSet
 {
-    Street *set[];
+    std::vector<Street> propSet;
+    friend class Street;
 
 public:
-    HouseSet(Street *set[]);
+    HouseSet(std::vector<Street> set);
     bool canAddHouse(Street *street);
     bool canRemoveHouse(Street *street);
 
@@ -64,9 +68,9 @@ public:
 class Railway : public Property
 {
     int rent;
-    int multiplier[];
+    std::vector<int> multiplier;
 public:
-    Railway(int rent);
+    Railway(int id, QString name, int purchasePrice, QString set, int rent);
     int returnRent();
 };
 
@@ -74,9 +78,10 @@ public:
 class Utility : public Property
 {
     int rent;
+    int multiplier;
 
 public:
-    Utility(int rent);
+    Utility(int id, QString name, int purchasePrice, QString set, int rent);
     int returnRent(int lastRoll);
 };
 

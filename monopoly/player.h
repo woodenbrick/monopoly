@@ -3,12 +3,17 @@
 
 #include <QString>
 #include <QImage>
-#include "square.h"
 #include "gui/playerframe.h"
-#include "card.h"
+#include <vector>
+class Card;
+class CardStack;
+class Square;
+class Property;
+
 
 class PurchaseTracker
 {
+public:
     Property *property[];
     int houses;
 };
@@ -19,26 +24,43 @@ private:
     QString name;
     //XXX SHOULD WE INCLUDE THE BOARD?
     Square *currentSquare;
-    Property [] *properties;
+    Property *properties[];
     int money;
-    Card[] *gojfc;
+    std::vector<Card> gojfc;
     bool inJail;
-    Property [] *sets; //not sure if this is required
+    Property *sets[]; //not sure if this is required
     PurchaseTracker currentPurchases;
     QImage counter;
     PlayerFrame *playerFrame;
+    void moveForward(Square nextPoint);
 
 
 public:
-    Player(QString name, Square &currentSquare, int money, QString counter);
-    void makeOffer(Player &player2, int payment, Property &properties[], Card &gojfc[],
-                   int paymentPlayer2, Property &propertiesPlayer2[], Card &gojfcPlayer2[]);
+    Player(QString name, Square *currentSquare, int money, QString counter);
+    void makeOffer(Player *player2, int payment, Property *properties[], Card *gojfc[],
+                   int paymentPlayer2, Property *propertiesPlayer2[], Card *gojfcPlayer2[]);
     bool hasSet();
-    Property[] propertiesInSetOwned(const QString set);
-    Property[] propertiesInSetOwned(const &Property);
+    int propertiesInSetOwned(const QString setName);
+    int propertiesInSetOwned(const Property *prop);
     void confirmHousePurchases();
     void addHouse();
-    int [] returnHouseHotelCount();
+    int returnHouseCount();
+    int returnHotelCount();
+    int getMoney();
+    void createDebt(int amount, Player &player);
+    void createDebt(int amount);
+    void addGojfc(Card &card);
+    void removeGojfc(CardStack &stack);
+    void makePayment(int amount);
+    void receivePayment(int amount);
+    void move(int squareId);
+    void move(Square destination);
+    void moveToNearestRailroad();
+    void moveToNearestUtility();
+    void moveBack3Spaces();
+    void sendToJail();
+
+
 
 };
 

@@ -1,6 +1,7 @@
 #include "square.h"
+#include "player.h"
 
-Square::Square(int id, QString name)
+Square::Square(int &id, QString &name)
 {
     this->id = id;
     this->name = name;
@@ -10,7 +11,7 @@ Square::Square(int id, QString name)
 
 
 
-Property::Property(int id, QString name, int purchasePrice, QString set) : Square(id, name)
+Property::Property(int &id, QString &name, int &purchasePrice, QString &set) : Square(id, name)
 {
     this->purchasePrice = purchasePrice;
     this->set = set;
@@ -19,9 +20,9 @@ Property::Property(int id, QString name, int purchasePrice, QString set) : Squar
 
 bool Property::purchase(Player *purchaser)
 {
-    if(purchaser->money >= purchasePrice)
+    if(purchaser->getMoney() >= purchasePrice)
     {
-        purchaser->money -= purchasePrice;
+        purchaser->makePayment(purchasePrice);
         owner = purchaser;
         return true;
     }
@@ -29,19 +30,19 @@ bool Property::purchase(Player *purchaser)
 }
 
 
-bool Property::mortgage()
+void Property::mortgage()
 {
 
-    owner->money += purchasePrice / 2;
+    owner->receivePayment(purchasePrice / 2);
     isMortgaged = true;
 }
 
 
 bool Property::unmortgage()
 {
-    if(owner->money >= purchasePrice / 2)
+    if(owner->getMoney() >= purchasePrice / 2)
     {
-        owner->money -= purchasePrice / 2;
+        owner->makePayment(purchasePrice / 2);
         isMortgaged = false;
         return true;
     }
@@ -51,23 +52,27 @@ bool Property::unmortgage()
 
 
 
-Street::Street(int id, QString name, int purchasePrice, QString set, int *rent[]) : Property(purchasePrice, set),
-Square(id, name)
+Street::Street(int &id, QString &name, int &purchasePrice, QString &set, std::vector <int> rent)
+    : Property(id, name, purchasePrice, set)
 {
+    //this->rent[0] = rent;
     this->rent = rent;
+    //this->rent[5] = rent;
 }
 
 
 bool Street::buyHouses(int amount)
 {
-    owner->money -= houseCost * amount;
+    owner->makePayment(houseCost * amount);
     houses += amount;
+    return true;
+
 }
 
 
 void Street::sellHouses(int amount)
 {
-    owner->money += houseCost / 2 * amount;
+    owner->receivePayment(houseCost / 2 * amount);
     houses -= amount;
 }
 
@@ -94,24 +99,25 @@ int Street::returnRent()
 
 
 
-HouseSet::HouseSet(Street *set[])
+HouseSet::HouseSet(std::vector<Street> set)
 {
-    this->set = set;
+    propSet = set;
 }
 
 
 bool HouseSet::canAddHouse(Street *street)
 {
     //check that other properties have equal or 1 more house
-    for(int i=0; i <=sizeof(set); i++)
+
+    for(int i=0; i <=propSet.size(); i++)
     {
-        if(set[i]->houses < street->houses || set[i]->houses > street->houses + 1)
+        if(propSet.at(i).houses < street->houses || propSet.at(i).houses > street->houses + 1)
         {
             return false;
         }
     }
     //check owner has money
-    if(! street->owner->money >= street->houseCost)
+    if(! street->owner->getMoney() >= street->houseCost)
     {
         return false;
     }
@@ -123,9 +129,9 @@ bool HouseSet::canAddHouse(Street *street)
 bool HouseSet::canRemoveHouse(Street *street)
 {
     //check that other properties have equal or 1 less house
-    for(int i=0; i <=sizeof(set); i++)
+    for(int i=0; i <=propSet.size(); i++)
     {
-        if(set[i]->houses > street->houses || set[i]->houses < street->houses - 1)
+        if(propSet.at(i).houses > street->houses || propSet.at(i).houses < street->houses - 1)
         {
             return false;
         }
@@ -136,24 +142,28 @@ bool HouseSet::canRemoveHouse(Street *street)
 
 
 
-Railway::Railway(int id, QString name, int purchasePrice, QString set, int rent) : Property(purchasePrice, set),
-Square(id, name)
+Railway::Railway(int id, QString name, int purchasePrice, QString set, int rent)
+        : Property(id, name, purchasePrice, set)
 {
     this->rent = rent;
-    multiplier = [1, 2, 4, 8];
+    multiplier.push_back(1);
+    multiplier.push_back(2);
+    multiplier.push_back(4);
+    multiplier.push_back(8);
+
 }
 
 
 int Railway::returnRent()
 {
-    return 25 * multiplier[owner->propertiesInSetOwned(this) - 1];
+    return 25 * multiplier.at(owner->propertiesInSetOwned(this) - 1);
 }
 
 
 
 
-Utility::Utility(int id, QString name, int purchasePrice, QString set, int rent) : Property(purchasePrice, set),
-Square(id, name)
+Utility::Utility(int id, QString name, int purchasePrice, QString set, int rent) :
+        Property(id, name, purchasePrice, set)
 {
     this->rent = rent;
 }
@@ -163,13 +173,13 @@ int Utility::returnRent(int lastRoll)
 {
     if(owner->propertiesInSetOwned(this) == 1)
     {
-        multipler = 4;
+        multiplier = 4;
     }
     else
     {
-        multipler = 10;
+        multiplier = 10;
     }
-    return rent * multipler;
+    return rent * multiplier;
 
 }
 
