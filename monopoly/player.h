@@ -9,13 +9,13 @@ class Card;
 class CardStack;
 class Square;
 class Property;
-
+class Offer;
 
 class PurchaseTracker
 {
 public:
-    Property *property[];
-    int houses;
+    std::vector<std::vector <int> > properties; //multidimensional vector [squareid, number of houses]
+    int houses; //this is the total number of houses for all purchases
 };
 
 class Player
@@ -24,11 +24,11 @@ private:
     QString name;
     //XXX SHOULD WE INCLUDE THE BOARD?
     Square *currentSquare;
-    Property *properties[];
+    std::vector<Property> *properties;
     int money;
     std::vector<Card> gojfc;
     bool inJail;
-    Property *sets[]; //not sure if this is required
+    std::vector<Property> *sets; //not sure if this is required
     PurchaseTracker currentPurchases;
     QImage counter;
     PlayerFrame *playerFrame;
@@ -36,21 +36,23 @@ private:
 
 
 public:
-    Player(QString name, Square *currentSquare, int money, QString counter);
-    void makeOffer(Player *player2, int payment, Property *properties[], Card *gojfc[],
-                   int paymentPlayer2, Property *propertiesPlayer2[], Card *gojfcPlayer2[]);
+    bool hasTurn;
+    bool pauseTurn; //true when player needs to do something before game can continue
+    Player creditor;
+    int debt;
+    Player(QString name, Square *currentSquare, int money, QImage *counter);
+    void makeOffer(Offer &offer);
     bool hasSet();
     int propertiesInSetOwned(const QString setName);
     int propertiesInSetOwned(const Property *prop);
     void confirmHousePurchases();
-    void addHouse();
     int returnHouseCount();
     int returnHotelCount();
     int getMoney();
     void createDebt(int amount, Player &player);
     void createDebt(int amount);
-    void addGojfc(Card &card);
-    void removeGojfc(CardStack &stack);
+    void aquireGojfc(Card &card);
+    void useGojfc(CardStack &stack);
     void makePayment(int amount);
     void receivePayment(int amount);
     void move(int squareId);
