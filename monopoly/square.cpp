@@ -8,6 +8,15 @@ Square::Square(int &id, QString &name)
 
 }
 
+int Square::getId()
+{
+    return id;
+}
+
+QString Square::getName()
+{
+    return name;
+}
 
 
 

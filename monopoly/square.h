@@ -14,6 +14,8 @@ protected:
 
 public:
     Square(int &id, QString &name);
+    int getId();
+    QString getName();
 
 };
 
