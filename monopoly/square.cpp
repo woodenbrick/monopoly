@@ -98,6 +98,10 @@ void Street::sellHouses(int amount)
     houses -= amount;
 }
 
+int Street::getHouseCount()
+{
+    return houses;
+}
 
 int Street::returnRent()
 {

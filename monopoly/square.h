@@ -22,6 +22,7 @@ public:
     bool isStreet();
     bool isEqual(Square* otherSquare);
     void setOthersInSet(HouseSet* houseSet);
+    virtual int getHouseCount();
 
 };
 
@@ -47,14 +48,15 @@ class Street : public Property
 {
 protected:
     std::vector <int> rent;
+    int houses;
     int houseCost;
     HouseSet *othersInSet;
 
 public:
-    int houses;
     Street(int id, QString &name, int purchasePrice, QString &set, std::vector <int> &rent);
     bool buyHouses(int amount);
     void sellHouses(int amount);
+    int getHouseCount();
     int returnRent();
     HouseSet* getOthersInSet();
 };
