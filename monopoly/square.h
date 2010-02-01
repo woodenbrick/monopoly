@@ -22,7 +22,6 @@ public:
     bool isStreet();
     bool isEqual(Square* otherSquare);
     void setOthersInSet(HouseSet* houseSet);
-    virtual int getHouseCount();
 
 };
 
@@ -38,6 +37,7 @@ public:
     Player *owner;
     bool purchase(Player *player);
     //Player *getOwner();
+
     void mortgage();
     bool unmortgage();
 };
@@ -57,6 +57,7 @@ public:
     bool buyHouses(int amount);
     void sellHouses(int amount);
     int getHouseCount();
+    int getHouseCost();
     int returnRent();
     HouseSet* getOthersInSet();
 };
@@ -67,9 +68,9 @@ class HouseSet
     friend class Street;
 
 public:
-    HouseSet(std::vector<Square*> set);
-    bool canAddHouse(Square *street);
-    bool canRemoveHouse(Square *street);
+    HouseSet(std::vector<Street*> set);
+    bool canAddHouse(Street *street);
+    bool canRemoveHouse(Street *street);
 
 };
 

@@ -8,17 +8,17 @@
 class Card;
 class CardStack;
 class Square;
-class Square;
+class Property;
 class Offer;
 
 
 class Purchase
 {
-    Square* property;
+    Property* property;
     int houseCount;
 public:
-    Purchase(Square* property, int houseCount);
-    Square* getProperty();
+    Purchase(Property* property, int houseCount);
+    Property* getProperty();
     int getHouseCount();
 };
 
@@ -27,8 +27,8 @@ class PurchaseTracker
     int houses; //this is the total number of houses for all purchases
     std::vector<Purchase> purchases;
 public:
-    void addPurchase(Square * property);
-    void removePurchase(Square * property);
+    void addPurchase(Property* property);
+    void removePurchase(Property* property);
     void cancelPurchases();
     void makePurchases();
 };
@@ -38,7 +38,7 @@ class Player
 private:
     QString name;
     Square *currentSquare;
-    std::vector<Square*> properties;
+    std::vector<Property*> properties;
     int money;
     std::vector<Card *> gojfc;
     bool inJail;

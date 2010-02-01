@@ -1,7 +1,7 @@
 #include "square.h"
 #include "player.h"
 
-Square::Square(int &id, QString &name, QString &set)
+Square::Square(int id, QString &name, QString &set)
 {
     this->id = id;
     this->name = name;
@@ -21,9 +21,9 @@ QString Square::getName()
 
 bool Square::isStreet()
 {
-    if(set == "None") return False;
-    if(set == "RR") return False;
-    if(set == "UT") return False;
+    if(set == "None") return false;
+    if(set == "RR") return false;
+    if(set == "UT") return false;
     return true;
 }
 
@@ -103,6 +103,11 @@ int Street::getHouseCount()
     return houses;
 }
 
+int Street::getHouseCost()
+{
+    return houseCost;
+}
+
 int Street::returnRent()
 {
     if(owner->hasSet())
@@ -125,25 +130,26 @@ int Street::returnRent()
 
 
 
-HouseSet::HouseSet(std::vector<Square> set)
+HouseSet::HouseSet(std::vector<Street*> set)
 {
     propSet = set;
 }
 
 
-bool HouseSet::canAddHouse(Square *street)
+bool HouseSet::canAddHouse(Street *street)
 {
     //check that other properties have equal or 1 more house
 
     for(int i=0; i <=propSet.size(); i++)
     {
-        if(propSet.at(i).houses < street->houses || propSet.at(i).houses > street->houses + 1)
+        if(propSet.at(i)->getHouseCount() < street->getHouseCount() ||
+           propSet.at(i)->getHouseCount() > street->getHouseCount() + 1)
         {
             return false;
         }
     }
     //check owner has money
-    if(! street->owner->getMoney() >= street->houseCost)
+    if(! street->owner->getMoney() >= street->getHouseCost())
     {
         return false;
     }
@@ -152,12 +158,13 @@ bool HouseSet::canAddHouse(Square *street)
 }
 
 
-bool HouseSet::canRemoveHouse(Square *street)
+bool HouseSet::canRemoveHouse(Street *street)
 {
     //check that other properties have equal or 1 less house
     for(int i=0; i <=propSet.size(); i++)
     {
-        if(propSet.at(i).houses > street->houses || propSet.at(i).houses < street->houses - 1)
+        if(propSet.at(i)->getHouseCount() > street->getHouseCount() ||
+           propSet.at(i)->getHouseCount() < street->getHouseCount() - 1)
         {
             return false;
         }

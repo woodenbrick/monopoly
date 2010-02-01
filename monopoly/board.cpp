@@ -125,13 +125,16 @@ Square& Board::getSquare(int id)
 
 HouseSet* Board::getSet(Square* thisStreet)
 {
-    HouseSet * houseset;
-    std::vector<Square *> streetPtr;
+    HouseSet* houseset;
+    Street* otherStreet;
+    std::vector<Street *> streetPtr;
     for(int i=0; i<squares.size(); i++)
     {
-        if(squares.at(i)->getSet() == thisStreet->getSet() && thisStreet->isEqual(squares.at(i)))
+        if(squares.at(i)->getSet() == thisStreet->getSet() && ! thisStreet->isEqual(squares.at(i)))
         {
-            streetPtr.push_back(squares.at(i));
+            //convert Square pointers to Street pointers
+            otherStreet = static_cast<Street*>(squares.at(i));
+            streetPtr.push_back(otherStreet);
         }
     }
     houseset = new HouseSet(streetPtr);
