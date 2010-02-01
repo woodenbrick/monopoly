@@ -22,13 +22,11 @@ class Player
 {
 private:
     QString name;
-    //XXX SHOULD WE INCLUDE THE BOARD?
     Square *currentSquare;
-    std::vector<Property> *properties;
+    std::vector<Property*> properties;
     int money;
     std::vector<Card> gojfc;
     bool inJail;
-    std::vector<Property> *sets; //not sure if this is required
     PurchaseTracker currentPurchases;
     QImage counter;
     PlayerFrame *playerFrame;
@@ -38,9 +36,9 @@ private:
 public:
     bool hasTurn;
     bool pauseTurn; //true when player needs to do something before game can continue
-    Player creditor;
+    Player *creditor;
     int debt;
-    Player(QString name, Square *currentSquare, int money, QImage *counter);
+    Player(QString name, Square &currentSquare, int money, QString counter);
     void makeOffer(Offer &offer);
     bool hasSet();
     int propertiesInSetOwned(const QString setName);

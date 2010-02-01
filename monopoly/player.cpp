@@ -1,7 +1,7 @@
 #include "player.h"
 
 
-Player::Player(QString name, Square *currentSquare, int money, QImage *counter)
+Player::Player(QString name, Square &currentSquare, int money, QString counter)
 {
     this->name = name;
     this->currentSquare = currentSquare;
