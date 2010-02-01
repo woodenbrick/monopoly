@@ -20,6 +20,7 @@ public:
     QString getName();
     QString getSet();
     bool isStreet();
+    bool isEqual(Square* otherSquare);
     void setOthersInSet(HouseSet* houseSet);
 
 };

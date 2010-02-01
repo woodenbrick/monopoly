@@ -27,6 +27,12 @@ bool Square::isStreet()
     return true;
 }
 
+bool Square::isEqual(Square *otherSquare)
+{
+    //return true if these squares refer to the same object
+    return true;
+}
+
 
 Property::Property(int &id, QString &name, int &purchasePrice, QString &set) : Square(id, name, set)
 {
