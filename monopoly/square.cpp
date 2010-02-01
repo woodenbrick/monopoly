@@ -121,13 +121,13 @@ int Street::returnRent()
 
 
 
-HouseSet::HouseSet(std::vector<Street> set)
+HouseSet::HouseSet(std::vector<Square> set)
 {
     propSet = set;
 }
 
 
-bool HouseSet::canAddHouse(Street *street)
+bool HouseSet::canAddHouse(Square *street)
 {
     //check that other properties have equal or 1 more house
 
@@ -148,7 +148,7 @@ bool HouseSet::canAddHouse(Street *street)
 }
 
 
-bool HouseSet::canRemoveHouse(Street *street)
+bool HouseSet::canRemoveHouse(Square *street)
 {
     //check that other properties have equal or 1 less house
     for(int i=0; i <=propSet.size(); i++)

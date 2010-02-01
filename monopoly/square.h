@@ -65,9 +65,9 @@ class HouseSet
     friend class Street;
 
 public:
-    HouseSet(std::vector<Street*> set);
-    bool canAddHouse(Street *street);
-    bool canRemoveHouse(Street *street);
+    HouseSet(std::vector<Square*> set);
+    bool canAddHouse(Square *street);
+    bool canRemoveHouse(Square *street);
 
 };
 
