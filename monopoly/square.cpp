@@ -1,10 +1,11 @@
 #include "square.h"
 #include "player.h"
 
-Square::Square(int &id, QString &name)
+Square::Square(int &id, QString &name, QString &set)
 {
     this->id = id;
     this->name = name;
+    this->set = set;
 
 }
 
@@ -18,12 +19,18 @@ QString Square::getName()
     return name;
 }
 
+bool Square::isStreet()
+{
+    if(set == "None") return False;
+    if(set == "RR") return False;
+    if(set == "UT") return False;
+    return true;
+}
 
 
-Property::Property(int &id, QString &name, int &purchasePrice, QString &set) : Square(id, name)
+Property::Property(int &id, QString &name, int &purchasePrice, QString &set) : Square(id, name, set)
 {
     this->purchasePrice = purchasePrice;
-    this->set = set;
 }
 
 
@@ -61,7 +68,7 @@ bool Property::unmortgage()
 
 
 
-Street::Street(int &id, QString &name, int &purchasePrice, QString &set, std::vector <int> rent)
+Street::Street(int id, QString &name, int purchasePrice, QString &set, std::vector <int> &rent)
     : Property(id, name, purchasePrice, set)
 {
     //this->rent[0] = rent;
