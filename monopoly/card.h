@@ -33,9 +33,9 @@ class CardStack
     void addToDiscardPile(Card card);
 
 public:
-    CardStack(std::vector<Card> deck);
+    CardStack();
     void shuffle();
-    void addToStack(Card card);
+    void addToStack(Card *card);
     QString pickup(Player *player, std::vector<Player> *otherPlayers);
     void useGojfc(Card &card);
 

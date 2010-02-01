@@ -15,9 +15,8 @@ Card::Card(int id, QString text, bool isGojfc, int streetRepairs, int money, boo
 }
 
 
-CardStack::CardStack(std::vector<Card>deck)
+CardStack::CardStack()
 {
-    this->deck = deck;
 
 }
 
@@ -26,18 +25,18 @@ void CardStack::shuffle()
     std::random_shuffle(deck.begin(), deck.end());
 }
 
-void CardStack::addToStack(Card card)
+void CardStack::addToStack(Card *card)
 {
     this->deck.push_back(card);
 }
 
-void CardStack::addToDiscardPile(Card card)
+void CardStack::addToDiscardPile(Card *card)
 {
     this->usedCards.push_back(card);
 }
 
 
-QString CardStack::pickup(Player *player, std::vector<Player> *otherPlayers)
+QString CardStack::pickup(Player *player, std::vector<Player*> otherPlayers)
 {
     Card currentCard = deck.back();
     deck.pop_back();
