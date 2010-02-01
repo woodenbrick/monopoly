@@ -83,7 +83,7 @@ QString CardStack::pickup(Player *player)
     else if(currentCard->isGojfc)
     {
         //Get out of jail free card
-        player->aquireGojfc(currentCard);
+        player->acquireGojfc(currentCard);
         //return early so we dont add card to discard pile
         return currentCard->text;
     }
