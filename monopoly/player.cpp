@@ -1,18 +1,22 @@
 #include "player.h"
+#include "square.h"
+#include "card.h"
 
+
+using namespace std;
 
 Player::Player(QString name, Square &currentSquare, int money, QString counter)
 {
     this->name = name;
-    this->currentSquare = currentSquare;
+    this->currentSquare = &currentSquare;
     this->money = money;
-    this->counter = counter;
+    this->counter = QImage(counter);
     inJail = false;
     hasTurn = false;
     pauseTurn = false;
 }
 
-void Player::makeOffer(Offer offer)
+void Player::makeOffer(Offer *offer)
 {
 
 }
@@ -25,9 +29,9 @@ bool Player::hasSet()
 int Player::propertiesInSetOwned(const QString setName)
 {
     int counter = 0;
-    for(int i=0; i<properties->size(); i++)
+    for(int i=0; i<properties.size(); i++)
     {
-        if(properties->at(i).set == setName)
+        if(properties.at(i)->getSet() == setName)
         {
             counter ++;
         }
@@ -35,69 +39,56 @@ int Player::propertiesInSetOwned(const QString setName)
     return counter;
 }
 
-int Player::propertiesInSetOwned(Property *prop)
-{
-    int counter = 0;
-    for(int i=0; i<properties->size(); i++)
-    {
-        if(properties->at(i).set == prop->set)
-        {
-            counter ++;
-        }
-    }
-    return counter;
-}
+
 
 void Player::confirmHousePurchases()
 {
-    std::vector<std::vector>::std::iterator propIter;
-    for(propIter=properties->begin(); propIter < properties->end(); properIter++)
-    {
-        propIter[0]->buyHouses(*propIter[1]);
-    }
+    currentPurchases.makePurchases();
 }
 
 
 
-int Player::returnHouseCount()
-{
-    int counter;
-    std::vector<Property>::std::iterator propIter;
-    for(propIter = properties->begin(); propIter < properties->end(); propIter++)
-    {
-        if (*propIter.houses < 5)
-        {
-            counter += *propIter.houses;
-        }
-    }
-    return counter;
-}
+//int Player::returnHouseCount()
+//{
+//    int counter;
+//    int i;
+//    vector<Square*>::iterator propIter;
+//    for(propIter = properties.begin(); propIter < properties.end(); propIter++)
+//    {
+//        i = *propIter->getHouseCount();
+//        if ( i < 5)
+//        {
+//            counter += i;
+//        }
+//    }
+//    return counter;
+//}
 
-int Player::returnHotelCount()
-{
-    int counter;
-    std::vector<Property>::std::iterator propIter;
-    for(propIter = properties->begin(); propIter < properties->end(); propIter++)
-    {
-        if (*propIter.houses == 5)
-        {
-            counter += 5;
-        }
-    }
-    return counter;
-}
+//int Player::returnHotelCount()
+//{
+//    int counter;
+//    vector<Square>::iterator propIter;
+//    for(propIter = properties.begin(); propIter < properties.end(); propIter++)
+//    {
+//        if (*propIter.houses == 5)
+//        {
+//            counter += 5;
+//        }
+//    }
+//    return counter;
+//}
 
 int Player::getMoney()
 {
     return money;
 }
 
-void Player::createDebt(int amount, Player &player)
+void Player::createDebt(int amount, Player *player)
 {
     if(money >= amount)
     {
         makePayment(amount);
-        player.receivePayment(amount);
+        player->receivePayment(amount);
 
     }
     else
@@ -125,36 +116,28 @@ void Player::createDebt(int amount)
     }
 }
 
-void Player::acquireGojfc(Card &card)
+void Player::acquireGojfc(Card *card)
 {
     gojfc.push_back(card);
 }
 
-void Player::useGojfc(CardStack &stack)
+void Player::useGojfc(CardStack *stack)
 {
-    Card card = gojfc.at(0);
+    Card *card = gojfc.at(0);
     gojfc.erase(gojfc.begin());
+    stack->useGojfc(card);
 
 }
 
-void Player::makePayment(int amount)
-{
-    money -= amount;
-}
+void Player::makePayment(int amount){ money -= amount; }
 
-void Player::receivePayment(int amount)
-{
-    money += amount;
-}
+void Player::receivePayment(int amount){ money += amount; }
 
 
 void Player::move(Square *destination)
 {
     //this is the main move function which will call moveForward successive times to simulate movement around the board
-    while(*destination != *currentSquare)
-    {
-        moveForward();
-    }
+    while(! destination->isEqual(currentSquare)){ moveForward(); }
 }
 
 void Player::moveForward()

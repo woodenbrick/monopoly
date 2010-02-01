@@ -8,14 +8,29 @@
 class Card;
 class CardStack;
 class Square;
-class Property;
+class Square;
 class Offer;
+
+
+class Purchase
+{
+    Square* property;
+    int houseCount;
+public:
+    Purchase(Square* property, int houseCount);
+    Square* getProperty();
+    int getHouseCount();
+};
 
 class PurchaseTracker
 {
-public:
-    std::vector<std::vector <int> > properties; //multidimensional vector [squareid, number of houses]
     int houses; //this is the total number of houses for all purchases
+    std::vector<Purchase> purchases;
+public:
+    void addPurchase(Square * property);
+    void removePurchase(Square * property);
+    void cancelPurchases();
+    void makePurchases();
 };
 
 class Player
@@ -23,38 +38,39 @@ class Player
 private:
     QString name;
     Square *currentSquare;
-    std::vector<Property*> properties;
+    std::vector<Square*> properties;
     int money;
-    std::vector<Card> gojfc;
+    std::vector<Card *> gojfc;
     bool inJail;
     PurchaseTracker currentPurchases;
     QImage counter;
     PlayerFrame *playerFrame;
-    void moveForward(Square nextPoint);
+    void moveForward();
 
 
 public:
+    std::vector<Player *> *otherPlayers;
     bool hasTurn;
     bool pauseTurn; //true when player needs to do something before game can continue
     Player *creditor;
     int debt;
     Player(QString name, Square &currentSquare, int money, QString counter);
-    void makeOffer(Offer &offer);
+    void makeOffer(Offer *offer);
     bool hasSet();
     int propertiesInSetOwned(const QString setName);
-    int propertiesInSetOwned(const Property *prop);
+    int propertiesInSetOwned(const Square *prop);
     void confirmHousePurchases();
     int returnHouseCount();
     int returnHotelCount();
     int getMoney();
-    void createDebt(int amount, Player &player);
+    void createDebt(int amount, Player *player);
     void createDebt(int amount);
-    void aquireGojfc(Card &card);
-    void useGojfc(CardStack &stack);
+    void acquireGojfc(Card *card);
+    void useGojfc(CardStack *stack);
     void makePayment(int amount);
     void receivePayment(int amount);
     void move(int squareId);
-    void move(Square destination);
+    void move(Square* destination);
     void moveToNearestRailroad();
     void moveToNearestUtility();
     void moveBack3Spaces();
