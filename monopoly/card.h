@@ -27,17 +27,17 @@ public:
 
 class CardStack
 {
-    std::vector<Card> deck;
-    std::vector<Card> usedCards;
+    std::vector<Card *> deck;
+    std::vector<Card *> usedCards;
     std::vector<Card>::iterator iter;
-    void addToDiscardPile(Card card);
+    void addToDiscardPile(Card *card);
 
 public:
     CardStack();
     void shuffle();
     void addToStack(Card *card);
-    QString pickup(Player *player, std::vector<Player> *otherPlayers);
-    void useGojfc(Card &card);
+    QString pickup(Player *player);
+    void useGojfc(Card *card);
 
 };
 

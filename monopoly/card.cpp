@@ -36,56 +36,56 @@ void CardStack::addToDiscardPile(Card *card)
 }
 
 
-QString CardStack::pickup(Player *player, std::vector<Player*> otherPlayers)
+QString CardStack::pickup(Player *player)
 {
-    Card currentCard = deck.back();
+    Card* currentCard = deck.back();
     deck.pop_back();
-    if(currentCard.streetRepairs != 0)
+    if(currentCard->streetRepairs != 0)
     {
         //street repairs
         int debt;
-        debt = (player->returnHouseCount() * currentCard.streetRepairs) + (player->returnHotelCount() * currentCard.money);
+        debt = (player->returnHouseCount() * currentCard->streetRepairs) + (player->returnHotelCount() * currentCard->money);
         player->createDebt(debt);
     }
-    else if(currentCard.playerTransfer)
+    else if(currentCard->playerTransfer)
     {
         //payment to others/others to self
         //negative money amounts indicate a payment, positive a receipt
-        for(int i=0; i<otherPlayers->size(); i++)
+        for(int i=0; i<player->otherPlayers->size(); i++)
         {
-            if(currentCard.money < 0)
+            if(currentCard->money < 0)
             {
-                player->createDebt(std::abs(currentCard.money), otherPlayers->at(i));
+                player->createDebt(std::abs(currentCard->money), player->otherPlayers->at(i));
             }
             else
             {
-                otherPlayers->at(i).createDebt(*currentCard.money, &player);
+                player->otherPlayers->at(i)->createDebt(currentCard->money, player);
             }
         }
     }
-    else if(currentCard.money != 0)
+    else if(currentCard->money != 0)
     {
         //payment to the bank
-        if (currentCard.money > 0)
+        if (currentCard->money > 0)
         {
-            player->receivePayment(currentCard.money);
+            player->receivePayment(currentCard->money);
         }
         else
         {
-            player->createDebt(abs(currentCard.money));
+            player->createDebt(abs(currentCard->money));
         }
     }
-    else if(currentCard.square >= 0)
+    else if(currentCard->square >= 0)
     {
         //player has moved to a different square
-        player->move(currentCard.square);
+        player->move(currentCard->square);
     }
-    else if(currentCard.isGojfc)
+    else if(currentCard->isGojfc)
     {
         //Get out of jail free card
-        player->addGojfc(currentCard);
+        player->aquireGojfc(currentCard);
         //return early so we dont add card to discard pile
-        return currentCard.text;
+        return currentCard->text;
     }
     else
     {
@@ -93,11 +93,11 @@ QString CardStack::pickup(Player *player, std::vector<Player*> otherPlayers)
         // -2 go to nearest railroad
         // -3 go to nearest utility
         // -4 go back 3 spaces
-        if(currentCard.square == -2)
+        if(currentCard->square == -2)
         {
             player->moveToNearestRailroad();
         }
-        if(currentCard.square == -3)
+        if(currentCard->square == -3)
         {
             player->moveToNearestUtility();
         }
@@ -107,12 +107,12 @@ QString CardStack::pickup(Player *player, std::vector<Player*> otherPlayers)
         }
     }
     this->addToDiscardPile(currentCard);
-    return currentCard.text;
+    return currentCard->text;
 
 }
 
 
-void CardStack::useGojfc(Card &card)
+void CardStack::useGojfc(Card *card)
 {
     this->usedCards.push_back(card);
 }
