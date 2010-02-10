@@ -6,7 +6,6 @@ Square::Square(int id, QString &name, QString &set)
     this->id = id;
     this->name = name;
     this->set = set;
-
 }
 
 int Square::getId()
@@ -18,6 +17,12 @@ QString Square::getName()
 {
     return name;
 }
+
+QString Square::getSet()
+{
+    return set;
+}
+
 
 bool Square::isStreet()
 {
@@ -127,6 +132,10 @@ int Street::returnRent()
     }
 }
 
+void Street::setOthersInSet(HouseSet *houseset)
+{
+    othersInSet = houseset;
+}
 
 
 
@@ -189,7 +198,7 @@ Railway::Railway(int id, QString name, int purchasePrice, QString set, int rent)
 
 int Railway::returnRent()
 {
-    return 25 * multiplier.at(owner->propertiesInSetOwned(this) - 1);
+    return 25 * multiplier.at(owner->propertiesInSetOwned(getSet()) - 1);
 }
 
 
@@ -204,7 +213,7 @@ Utility::Utility(int id, QString name, int purchasePrice, QString set, int rent)
 
 int Utility::returnRent(int lastRoll)
 {
-    if(owner->propertiesInSetOwned(this) == 1)
+    if(owner->propertiesInSetOwned(getSet()) == 1)
     {
         multiplier = 4;
     }

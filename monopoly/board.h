@@ -37,7 +37,7 @@ class Board
 public:
     CardStack *createCardStack(QString type);
     Board(QString locale, std::vector<std::vector<QString> > namesAndImages);
-    Square& getSquare(int id);
+    Square* getSquare(int id);
     HouseSet* getSet(Square *thisStreet);
     void squareFactory();
     std::vector<Player*>* getOtherPlayers(Player *player);

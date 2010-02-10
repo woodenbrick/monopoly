@@ -4,6 +4,7 @@
 #include <QString>
 #include <vector>
 #include "player.h"
+#include "square.h"
 
 
 class Card
@@ -15,12 +16,13 @@ class Card
     int streetRepairs; //set to 0 if not street repairs otherwise it is the amount per house
     int money; //a payment to be made (- pay, + receive) or the cost of street repairs per hotel
     bool playerTransfer; //true if money should be transfered between players
-    int square; //a square to move to or -1 if not moving. -2 for special cases (move to next railroad, go back 3 spaces
-    
+    int squareId; //a square to move to or -1 if not moving. -2 for special cases (move to next railroad, go back 3 spaces
+    Square* square; //A destination square, if we are going to move
     
 public:
     Card(int id, QString text, bool isGojfc, int streetRepairs, int money,
-         bool playerTransfer, int square);
+         bool playerTransfer, int squareId);
+    void setDestinationSquare(Square* destination);
 
 };
 

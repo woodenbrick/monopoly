@@ -16,6 +16,26 @@ Settings::Settings(int cash, int goMoney, int superTax, QString currencySymbol)
     this->currencySymbol = currencySymbol;
 }
 
+int Settings::getCash()
+{
+    return cash;
+}
+
+int Settings::getGoMoney()
+{
+    return goMoney;
+}
+
+QString Settings::getCurrencySymbol()
+{
+    return currencySymbol;
+}
+
+int Settings::getSuperTax()
+{
+    return superTax;
+}
+
 Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
 {
     QString database = "resources/db/";
@@ -25,14 +45,13 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
     statement = conn.Statement("select cash, go, super, currency from settings");
     QString currency(statement->ValueString(3).c_str());
     settings = new Settings(statement->ValueInt(0), statement->ValueInt(1), statement->ValueInt(2), currency);
+    squareFactory();
     communityChest = createCardStack("community_chest");
     chance = createCardStack("chance");
-    squareFactory();
-
     //get Go square for players to start on
-    Square &go = getSquare(0);
+    Square* go = getSquare(0);
     std::vector<std::vector<QString> >::iterator it;
-    Player * playerPtr;
+    Player* playerPtr;
     for(it = namesAndImages.begin(); it < namesAndImages.end(); it++)
         playerPtr = new Player(QString("Daniel"), go, settings->getCash(), QString("Hat.png"));
         players.push_back(playerPtr);
@@ -54,6 +73,12 @@ CardStack *Board::createCardStack(QString type)
         Card *card = new Card(statement->ValueInt(0), QString(statement->ValueString(1).c_str()), goj,
                          statement->ValueInt(3), statement->ValueInt(4), pl, statement->ValueInt(6));
         stack->addToStack(card);
+        //if the card requires movement, set the destination square
+        if(statement->ValueInt(6) >= 0)
+        {
+            card->setDestinationSquare(getSquare(statement->ValueInt(6)));
+        }
+
     }
     return stack;
 
@@ -110,17 +135,9 @@ void Board::squareFactory()
 
 }
 
-Square& Board::getSquare(int id)
+Square* Board::getSquare(int id)
 {
-    return *squares.at(id);
-//    std::vector<Square*>::iterator it;
-//    for(it=squares.begin(); it<squares.end(); it++)
-//    {
-//        if(it->getId() == id)
-//        {
-//            return &it;
-//        }
-//    }
+    return squares.at(id);
 }
 
 HouseSet* Board::getSet(Square* thisStreet)

@@ -5,10 +5,10 @@
 
 using namespace std;
 
-Player::Player(QString name, Square &currentSquare, int money, QString counter)
+Player::Player(QString name, Square *currentSquare, int money, QString counter)
 {
     this->name = name;
-    this->currentSquare = &currentSquare;
+    this->currentSquare = currentSquare;
     this->money = money;
     this->counter = QImage(counter);
     inJail = false;
@@ -47,36 +47,6 @@ void Player::confirmHousePurchases()
 }
 
 
-
-//int Player::returnHouseCount()
-//{
-//    int counter;
-//    int i;
-//    vector<Square*>::iterator propIter;
-//    for(propIter = properties.begin(); propIter < properties.end(); propIter++)
-//    {
-//        i = *propIter->getHouseCount();
-//        if ( i < 5)
-//        {
-//            counter += i;
-//        }
-//    }
-//    return counter;
-//}
-
-//int Player::returnHotelCount()
-//{
-//    int counter;
-//    vector<Square>::iterator propIter;
-//    for(propIter = properties.begin(); propIter < properties.end(); propIter++)
-//    {
-//        if (*propIter.houses == 5)
-//        {
-//            counter += 5;
-//        }
-//    }
-//    return counter;
-//}
 
 int Player::getMoney()
 {
@@ -133,6 +103,36 @@ void Player::makePayment(int amount){ money -= amount; }
 
 void Player::receivePayment(int amount){ money += amount; }
 
+int Player::returnBuildingCount(bool isHotelCount=false)
+{
+    int counter = 0;
+    int houses;
+    for(int i=0; i<sizeof(properties); i++)
+    {
+        houses = properties.at(i)->getHouseCount();
+        if(!isHotelCount)
+        {
+            counter += houses;
+        }
+        else if(houses == 5)
+        {
+            counter += houses;
+        }
+    }
+    return counter;
+}
+
+int Player::returnHotelCount()
+{
+    return returnBuildingCount(true);
+}
+
+int Player::returnHouseCount()
+{
+    returnBuildingCount();
+}
+
+
 
 void Player::move(Square *destination)
 {
@@ -168,4 +168,85 @@ void Player::sendToJail()
 
 }
 
+
+
+Purchase::Purchase(Property *property)
+{
+    this->property = property;
+    this->houseCount = 0;
+}
+
+
+Property* Purchase::getProperty()
+{
+    return property;
+}
+
+int Purchase::getHouseCount()
+{
+    return houseCount;
+}
+
+void Purchase::addHouse()
+{
+    houseCount++;
+}
+
+void Purchase::removeHouse()
+{
+    houseCount--;
+}
+
+void makePurchases()
+{
+    //pay for this
+}
+
+PurchaseTracker::PurchaseTracker()
+{
+    houses = 0;
+}
+
+void PurchaseTracker::addPurchase(Property* property)
+{
+    //check if purchase exists then increment its housecount
+
+    currentPurchase = getPurchase(property);
+    if(!currentPurchase)
+    {
+        currentPurchase = &Purchase(property);
+        purchases.push_back(currentPurchase);
+    }
+    currentPurchase->addHouse();
+    houses++;
+}
+
+void PurchaseTracker::removePurchase(Property* property)
+{
+    currentPurchase = getPurchase(property);
+    currentPurchase->removeHouse();
+    houses--;
+
+}
+
+void PurchaseTracker::cancelPurchases()
+{
+    purchases.clear();
+}
+
+Purchase* PurchaseTracker::getPurchase(Property *property)
+{
+    for(int i=0; i<sizeof(purchases); i++)
+    {
+        if(purchases.at(i)->getProperty() == property)
+        {
+            return purchases.at(i);
+        }
+    }
+}
+
+void PurchaseTracker::makePurchases()
+{
+    //add/remove houses deduct money from players account.
+}
 

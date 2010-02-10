@@ -17,20 +17,27 @@ class Purchase
     Property* property;
     int houseCount;
 public:
-    Purchase(Property* property, int houseCount);
+    Purchase(Property* property);
     Property* getProperty();
     int getHouseCount();
+    void addHouse();
+    void removeHouse();
+    void makePurchases();
 };
 
 class PurchaseTracker
 {
     int houses; //this is the total number of houses for all purchases
-    std::vector<Purchase> purchases;
+    std::vector<Purchase *> purchases;
+    Purchase* currentPurchase;
+
 public:
+    PurchaseTracker();
     void addPurchase(Property* property);
     void removePurchase(Property* property);
     void cancelPurchases();
     void makePurchases();
+    Purchase* getPurchase(Property* property);
 };
 
 class Player
@@ -46,6 +53,7 @@ private:
     QImage counter;
     PlayerFrame *playerFrame;
     void moveForward();
+    int returnBuildingCount(bool isHotelCount);
 
 
 public:
@@ -54,7 +62,7 @@ public:
     bool pauseTurn; //true when player needs to do something before game can continue
     Player *creditor;
     int debt;
-    Player(QString name, Square &currentSquare, int money, QString counter);
+    Player(QString name, Square *currentSquare, int money, QString counter);
     void makeOffer(Offer *offer);
     bool hasSet();
     int propertiesInSetOwned(const QString setName);

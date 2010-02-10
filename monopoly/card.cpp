@@ -2,7 +2,8 @@
 #include <algorithm>
 #include "board.h"
 
-Card::Card(int id, QString text, bool isGojfc, int streetRepairs, int money, bool playerTransfer, int square)
+Card::Card(int id, QString text, bool isGojfc, int streetRepairs,
+           int money, bool playerTransfer, int squareId)
 {
     this->id = id;
     this->text = text;
@@ -10,10 +11,14 @@ Card::Card(int id, QString text, bool isGojfc, int streetRepairs, int money, boo
     this->streetRepairs = streetRepairs;
     this->money = money;
     this->playerTransfer = playerTransfer;
-    this->square = square;
+    this->squareId = squareId;
 
 }
 
+void Card::setDestinationSquare(Square* destination)
+{
+    square = destination;
+}
 
 CardStack::CardStack()
 {
@@ -75,7 +80,7 @@ QString CardStack::pickup(Player *player)
             player->createDebt(abs(currentCard->money));
         }
     }
-    else if(currentCard->square >= 0)
+    else if(currentCard->squareId >= 0)
     {
         //player has moved to a different square
         player->move(currentCard->square);
@@ -93,11 +98,11 @@ QString CardStack::pickup(Player *player)
         // -2 go to nearest railroad
         // -3 go to nearest utility
         // -4 go back 3 spaces
-        if(currentCard->square == -2)
+        if(currentCard->squareId == -2)
         {
             player->moveToNearestRailroad();
         }
-        if(currentCard->square == -3)
+        if(currentCard->squareId == -3)
         {
             player->moveToNearestUtility();
         }
