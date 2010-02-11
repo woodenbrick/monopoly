@@ -26,6 +26,7 @@ public:
 class Board
 {
     std::vector<Square*> squares;
+    std::vector<Street*> streets;
     std::vector<Player*> players;
     CardStack *communityChest;
     CardStack *chance;
@@ -38,7 +39,7 @@ public:
     CardStack *createCardStack(QString type);
     Board(QString locale, std::vector<std::vector<QString> > namesAndImages);
     Square* getSquare(int id);
-    HouseSet* getSet(Square *thisStreet);
+    HouseSet* getSet(Street *thisStreet);
     void squareFactory();
     std::vector<Player*>* getOtherPlayers(Player *player);
 };

@@ -89,7 +89,8 @@ void Board::squareFactory()
     statement = conn.Statement(
             "select id, name, price, _set, street.rent, street.one, street.two, street.three, street.four, "
             "street.five from squares LEFT OUTER JOIN street ON squares.id = street.square_id");
-    Square *sqrPtr;
+    Square* sqrPtr;
+    Street* ptyPtr;
     std::vector<int> rents;
     //_set is one of None|B|LB|P|O|R|Y|G|DB|RR|UT
     while(statement->NextRow())
@@ -120,15 +121,17 @@ void Board::squareFactory()
              }
              sqrPtr = new Street(statement->ValueInt(0), name, statement->ValueInt(2),
                                 set, rents);
+             ptyPtr = static_cast<Street*>(sqrPtr);
+             streets.push_back(ptyPtr);
         }
         squares.push_back(sqrPtr);
     }
     //give references to each street about other houses in its set
-    for(int i=0; i<squares.size(); i++)
+    for(int i=0; i<streets.size(); i++)
     {
-        if(squares.at(i)->isStreet())
+        if(streets.at(i)->isStreet())
         {
-            squares.at(i)->setOthersInSet(getSet(squares.at(i)));
+            streets.at(i)->setOthersInSet(getSet(streets.at(i)));
         }
     }
     //give references to each player about the other players
@@ -140,21 +143,19 @@ Square* Board::getSquare(int id)
     return squares.at(id);
 }
 
-HouseSet* Board::getSet(Square* thisStreet)
+HouseSet* Board::getSet(Street *thisStreet)
 {
     HouseSet* houseset;
-    Street* otherStreet;
-    std::vector<Street *> streetPtr;
-    for(int i=0; i<squares.size(); i++)
+    std::vector<Street *> streetList;
+    for(int i=0; i<streets.size(); i++)
     {
-        if(squares.at(i)->getSet() == thisStreet->getSet() && ! thisStreet->isEqual(squares.at(i)))
+        if(streets.at(i)->getSet() == thisStreet->getSet() &&
+           ! thisStreet->isEqual(streets.at(i)))
         {
-            //convert Square pointers to Street pointers
-            otherStreet = static_cast<Street*>(squares.at(i));
-            streetPtr.push_back(otherStreet);
+            streetList.push_back(streets.at(i));
         }
     }
-    houseset = new HouseSet(streetPtr);
+    houseset = new HouseSet(streetList);
     return houseset;
 
 }

@@ -105,11 +105,15 @@ void Player::receivePayment(int amount){ money += amount; }
 
 int Player::returnBuildingCount(bool isHotelCount=false)
 {
+    Street* strPtr;
     int counter = 0;
     int houses;
     for(int i=0; i<sizeof(properties); i++)
     {
-        houses = properties.at(i)->getHouseCount();
+        //get a Street pointer from the property pointer
+        if(properties.at(i)->isStreet()){continue;} //railway or utility
+        strPtr = static_cast<Street*>(properties.at(i));
+        houses = strPtr->getHouseCount();
         if(!isHotelCount)
         {
             counter += houses;

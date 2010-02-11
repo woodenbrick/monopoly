@@ -21,7 +21,6 @@ public:
     QString getSet();
     bool isStreet();
     bool isEqual(Square* otherSquare);
-    virtual void setOthersInSet(HouseSet* houseSet) = 0;
 
 
 };
@@ -37,9 +36,6 @@ public:
     Property(int &id, QString &name, int &purchasePrice, QString &set);
     Player *owner;
     bool purchase(Player *player);
-    //Player *getOwner();
-    //virtual int getHouseCount() = 0;
-    //virtual int getHotelCount() = 0;
     void mortgage();
     bool unmortgage();
 };
