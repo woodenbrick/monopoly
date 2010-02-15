@@ -67,6 +67,7 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
     for(it = namesAndImages.begin(); it < namesAndImages.end(); it++)
         playerPtr = new Player(QString("Daniel"), go, settings->getCash(), QString("Hat.png"));
         players.push_back(playerPtr);
+    turn = 0;
 
 
 }
