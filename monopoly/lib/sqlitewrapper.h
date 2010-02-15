@@ -29,7 +29,7 @@
 
     #include <string>
     #include <vector>
-
+    #include <QString>
     #include "sqlite3.h"
 
     class SQLiteStatement {
@@ -53,6 +53,8 @@
 
         int         ValueInt   (int pos_zero_indexed);
         std::string ValueString(int pos_zero_indexed);
+        QString ValueQString(int pos_zero_indexed);
+        bool ValueBool(int pos_zero_indexed);
 
     //    SQLiteStatement(const SQLiteStatement&);
        ~SQLiteStatement();

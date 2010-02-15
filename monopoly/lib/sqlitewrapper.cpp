@@ -208,6 +208,18 @@ std::string SQLiteStatement::ValueString(int pos_zero_indexed) {
   return std::string(reinterpret_cast<const char*>(sqlite3_column_text(stmt_, pos_zero_indexed)));
 }
 
+QString SQLiteStatement::ValueQString(int pos_zero_indexed){
+    std::string str = ValueString(pos_zero_indexed);
+    return QString::fromStdString(str);
+}
+
+bool SQLiteStatement::ValueBool(int pos_zero_indexed){
+    if(sqlite3_column_int(stmt_, pos_zero_indexed) != 0){
+        return true;
+    }
+    return false;
+}
+
 bool SQLiteStatement::RestartSelect() {
   sqlite3_reset(stmt_);
   return true;
