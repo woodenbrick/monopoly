@@ -43,7 +43,7 @@ public:
     HouseSet* getSet(Street *thisStreet);
     void squareFactory();
     Player* getCurrentPlayer();
-    void nextPlayer();
+    Player* nextPlayer();
     std::vector<Player*>* getOtherPlayers(Player *player);
 };
 

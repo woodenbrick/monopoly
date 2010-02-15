@@ -171,6 +171,22 @@ HouseSet* Board::getSet(Street *thisStreet)
 
 }
 
+
+Player* Board::getCurrentPlayer()
+{
+    return players.at(turn);
+}
+
+Player* Board::nextPlayer()
+{
+    turn++;
+    if(turn == players.size())
+    {
+        turn = 0;
+    }
+    return getCurrentPlayer();
+}
+
 std::vector<Player*>* Board::getOtherPlayers(Player *player)
 {
     std::vector<Player*> *otherPlayers;

@@ -12,8 +12,9 @@ private:
 public:
     QString rollString;
     QString rollStringDouble;
+    QString getLastRollString();
     Dice();
-    int roll();
+    int roll(bool inJail=false);
     int getLastRoll();
     int getDie1();
     int getDie2();

@@ -11,7 +11,7 @@ Dice::Dice()
     rollString = " rolled a %1 and a %2";
 }
 
-bool Dice::roll(bool inJail=false)
+int Dice::roll(bool inJail)
 {
     die1 = rand() % 6 + 1;
     die2 = rand() % 6 + 1;
@@ -40,7 +40,7 @@ int Dice::getLastRoll()
     return die1 + die2;
 }
 
-QString& Dice::getLastRollString()
+QString Dice::getLastRollString()
 {
     if(die1 == die2)
     {
@@ -65,7 +65,7 @@ int Dice::getJailRolls()
     return jailRolls;
 }
 
-bool tooManyDoubles()
+bool Dice::tooManyDoubles()
 {
     if(doublesRolled == 3)
     {

@@ -2,4 +2,6 @@
 *journal
 *autosave
 *.pro.user
+*.pro
+Makefile
 *.o

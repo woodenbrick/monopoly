@@ -5,6 +5,7 @@
 #include "square.h"
 #include "board.h"
 #include <vector>
+#include <iostream>
 int main(int argc, char *argv[])
 {
 //    QApplication app(argc, argv);
@@ -21,4 +22,7 @@ int main(int argc, char *argv[])
     player.push_back("Lewis");
     player.push_back("Dog");
     Board *board = new Board("UK", players);
+    int total = board->getCurrentPlayer()->dice->roll();
+    std::cout << total;
+    std::cout << board->getCurrentPlayer()->dice->getLastRollString().toStdString();
 }
