@@ -1,4 +1,4 @@
-#include "gui/playerframe.h"
+#include "gui/ui_board.h"
 #include <QApplication>
 #include "player.h"
 #include "card.h"
@@ -8,11 +8,15 @@
 #include <iostream>
 int main(int argc, char *argv[])
 {
-//    QApplication app(argc, argv);
-//    QMainWindow *win = new QMainWindow();
-//    PlayerFrame::PlayerFrame *player = new PlayerFrame(win, "Daniel");
-//    win->show();
-//    return app.exec();
+    //variables that should be built on the fly
+    //we will hard code them here for testing purposes
+    QString locale = "UK";
+
+    QApplication app(argc, argv);
+    QMainWindow* win = new QMainWindow();
+    Ui::MainWindow gui;
+    gui.setupUi(win);
+    win->show();
     std::vector<std::vector<QString> > players;
     std::vector<QString> player;
     player.push_back("Daniel");
@@ -21,8 +25,12 @@ int main(int argc, char *argv[])
     player.clear();
     player.push_back("Lewis");
     player.push_back("Dog");
-    Board *board = new Board("UK", players);
+    Board *board = new Board(locale, players);
+    QPixmap bpic(":/images/locale/UK/board.png");
+    gui.board_pic->setPixmap(bpic);
+    gui.board_pic->show();
     int total = board->getCurrentPlayer()->dice->roll();
     std::cout << total;
     std::cout << board->getCurrentPlayer()->dice->getLastRollString().toStdString();
+    return app.exec();
 }
