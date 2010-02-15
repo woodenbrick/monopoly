@@ -1,7 +1,8 @@
 #include "board.h"
 #include "stdio.h"
 #include "printf.h"
-
+#include <stdio.h>
+#include <iostream>
 //    std::vector<Square> square;
 //    CardStack *communityChest;
 //   CardStack *chance;
@@ -14,6 +15,9 @@ Settings::Settings(int cash, int goMoney, int superTax, QString currencySymbol)
     this->goMoney = goMoney;
     this->superTax = superTax;
     this->currencySymbol = currencySymbol;
+    std::cout << "Settings:\n" << "Starting cash: " << cash << "\nGo Money: "
+            << goMoney << "\nSuper tax: " << superTax << "\nCurrency symbol: "
+            << currencySymbol.toStdString() << std::endl;
 }
 
 int Settings::getCash()
@@ -41,9 +45,17 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
     QString database = "resources/db/";
     database.append(locale).append(".sqlite");
     std::string db = std::string(database.toLatin1());
-    conn.Open(db);
+    if(conn.Open(db))
+    {
+        std::cout << "database loaded" << std::endl;
+    }
+    else
+    {
+        std::cout << "Couldn't load database: " << std::endl;
+    }
     statement = conn.Statement("select cash, go, super, currency from settings");
-    QString currency(statement->ValueString(3).c_str());
+    statement->NextRow();
+    QString currency = statement->ValueQString(3);
     settings = new Settings(statement->ValueInt(0), statement->ValueInt(1), statement->ValueInt(2), currency);
     squareFactory();
     communityChest = createCardStack("community_chest");
@@ -59,19 +71,17 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
 
 }
 
-CardStack *Board::createCardStack(QString type)
+CardStack *Board::createCardStack(std::string type)
 {
     CardStack *stack = new CardStack;
-    bool pl, goj;
-    statement = conn.Statement("select id, text, isGojfc, streetRepairs, money, playerTrans, square, from ?");
-    std::string t = std::string(type.toLatin1());
-    statement->Bind(0, t);
+    if(type == "chance"){ statement = conn.Statement("select id, text, isGojfc, streetRepairs, money, playerTrans, square from chance");}
+    else{statement = conn.Statement("select id, text, isGojfc, streetRepairs, money, playerTrans, square from community_chest");}
     while (statement->NextRow())
     {
-        (statement->ValueInt(2) == 1) ? goj = true : goj = false;
-        (statement->ValueInt(5) == 1) ? pl = true : pl = false;
-        Card *card = new Card(statement->ValueInt(0), QString(statement->ValueString(1).c_str()), goj,
-                         statement->ValueInt(3), statement->ValueInt(4), pl, statement->ValueInt(6));
+        Card *card = new Card(statement->ValueInt(0), statement->ValueQString(1),
+                              statement->ValueBool(2), statement->ValueInt(3),
+                              statement->ValueInt(4), statement->ValueBool(5),
+                              statement->ValueInt(6));
         stack->addToStack(card);
         //if the card requires movement, set the destination square
         if(statement->ValueInt(6) >= 0)

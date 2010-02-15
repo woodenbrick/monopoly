@@ -28,6 +28,7 @@ class Board
     std::vector<Square*> squares;
     std::vector<Street*> streets;
     std::vector<Player*> players;
+    int turn; //keeps track of whose turn it is
     CardStack *communityChest;
     CardStack *chance;
     SQLiteWrapper conn;
@@ -36,11 +37,13 @@ class Board
 
 
 public:
-    CardStack *createCardStack(QString type);
+    CardStack *createCardStack(std::string type);
     Board(QString locale, std::vector<std::vector<QString> > namesAndImages);
     Square* getSquare(int id);
     HouseSet* getSet(Street *thisStreet);
     void squareFactory();
+    Player* getCurrentPlayer();
+    void nextPlayer();
     std::vector<Player*>* getOtherPlayers(Player *player);
 };
 

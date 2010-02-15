@@ -1,6 +1,7 @@
 #include "card.h"
 #include <algorithm>
 #include "board.h"
+#include <iostream>
 
 Card::Card(int id, QString text, bool isGojfc, int streetRepairs,
            int money, bool playerTransfer, int squareId)
@@ -12,6 +13,9 @@ Card::Card(int id, QString text, bool isGojfc, int streetRepairs,
     this->money = money;
     this->playerTransfer = playerTransfer;
     this->squareId = squareId;
+    std::cout << "id: " << id << "\n" << text.toStdString() << "\nGOJFC: " << isGojfc << "\nStreet repairs: "
+            << streetRepairs << "\nMoney:" << money << "\nPlayer Transfer: " << playerTransfer <<
+            "\nSquare Id: " << squareId << std::endl;
 
 }
 
