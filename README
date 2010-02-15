@@ -1,2 +1,7 @@
 An online version of the popular board game written in C++/QT.
 
+To compile: 
+qmake -project
+qmake
+make
+
