@@ -14,6 +14,7 @@ Player::Player(QString name, Square *currentSquare, int money, QString counter)
     inJail = false;
     hasTurn = false;
     pauseTurn = false;
+    dice = new Dice();
 }
 
 void Player::makeOffer(Offer *offer)

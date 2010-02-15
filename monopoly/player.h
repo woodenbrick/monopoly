@@ -5,6 +5,8 @@
 #include <QImage>
 #include "gui/playerframe.h"
 #include <vector>
+#include "dice.h"
+
 class Card;
 class CardStack;
 class Square;
@@ -58,6 +60,7 @@ private:
 
 public:
     std::vector<Player *> *otherPlayers;
+    Dice* dice;
     bool hasTurn;
     bool pauseTurn; //true when player needs to do something before game can continue
     Player *creditor;
