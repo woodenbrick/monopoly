@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <games>
     {% for game in games %}
-    <game id="{{game.id}}">
-        <creator>{{game.creator.nickname}}</creator>
+    <game id="{{game.game_id}}">
+        <status>{{game.status}}</status>
+        <creator>{{game.creator.name}}</creator>
         <ip>{{ip}}</ip>
         <locale>{{game.locale}}</locale>
         <min_players>{{game.min_players}}</min_players>
         <max_players>{{game.max_players}}</max_players>
-        <players count="{{game.current_players}}">
-            {% for player in players %}
-                <player>{{player.nickname}}</player>
+        <players count="{{game.current_player_count}}">
+            {% for name in game.current_player_names %}
+                <player>{{name}}</player>
             {% endfor %}
         </players>
     </game>
