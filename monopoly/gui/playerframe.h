@@ -27,4 +27,5 @@ private:
     QPushButton *button;
 };
 
+
 #endif // PLAYERFRAME_H

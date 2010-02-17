@@ -22,3 +22,4 @@ void PlayerFrame::setPropertyOwnership(int id, bool owned)
 {
 
 }
+
