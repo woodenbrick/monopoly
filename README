@@ -7,5 +7,7 @@ libsqlite3-dev
 To compile: 
 qmake -project
 qmake
+need to edit the makefile:
+line starting with "LIBS=" add "-lsqlite3" to the end
 make
 
