@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow" >
+ <class>Board</class>
+ <widget class="QMainWindow" name="Board" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -107,7 +107,7 @@ p, li { white-space: pre-wrap; }
       <string>Buy/Sell Houses</string>
      </property>
     </widget>
-    <widget class="QWidget" name="" >
+    <widget class="QWidget" name="layoutWidget" >
      <property name="geometry" >
       <rect>
        <x>20</x>

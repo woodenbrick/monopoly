@@ -1,121 +1,65 @@
 <ui version="4.0" >
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog" >
+ <class>Lobby</class>
+ <widget class="QDialog" name="Lobby" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>617</width>
-    <height>574</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="" >
+  <widget class="QTableView" name="gameList" >
    <property name="geometry" >
     <rect>
-     <x>460</x>
+     <x>30</x>
+     <y>50</y>
+     <width>256</width>
+     <height>192</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="buttonCreate" >
+   <property name="geometry" >
+    <rect>
+     <x>300</x>
      <y>30</y>
-     <width>83</width>
-     <height>101</height>
+     <width>80</width>
+     <height>27</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" >
-    <item>
-     <widget class="QPushButton" name="quit" >
-      <property name="text" >
-       <string>Start Game</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="readyButton" >
-      <property name="text" >
-       <string>Ready!</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="startButton" >
-      <property name="text" >
-       <string>Disconnect</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text" >
+    <string>Create Game</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="" >
+  <widget class="QPushButton" name="buttonJoin" >
    <property name="geometry" >
     <rect>
-     <x>70</x>
-     <y>20</y>
-     <width>371</width>
-     <height>151</height>
+     <x>300</x>
+     <y>70</y>
+     <width>80</width>
+     <height>27</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2" >
-    <item>
-     <widget class="QLabel" name="label" >
-      <property name="text" >
-       <string>Connected players</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QListView" name="connectedPlayers" />
-    </item>
-   </layout>
+   <property name="text" >
+    <string>Join Game</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="" >
+  <widget class="QPushButton" name="buttonExit" >
    <property name="geometry" >
     <rect>
-     <x>60</x>
-     <y>220</y>
-     <width>441</width>
-     <height>291</height>
+     <x>300</x>
+     <y>110</y>
+     <width>80</width>
+     <height>27</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout" >
-    <item row="0" column="0" colspan="2" >
-     <widget class="QTextEdit" name="chatView" />
-    </item>
-    <item row="1" column="0" >
-     <widget class="QLabel" name="label_2" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>0</width>
-        <height>30</height>
-       </size>
-      </property>
-      <property name="text" >
-       <string>Chat:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1" >
-     <widget class="QTextEdit" name="chatEntry" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize" >
-       <size>
-        <width>0</width>
-        <height>30</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text" >
+    <string>Exit</string>
+   </property>
   </widget>
  </widget>
  <resources/>
