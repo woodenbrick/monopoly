@@ -1,6 +1,5 @@
 #include "board.h"
 #include "stdio.h"
-#include "printf.h"
 #include <stdio.h>
 #include <iostream>
 //    std::vector<Square> square;

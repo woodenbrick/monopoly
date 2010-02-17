@@ -1,5 +1,9 @@
 An online version of the popular board game written in C++/QT.
 
+build dependencies:
+g++
+qmake
+libsqlite3-dev
 To compile: 
 qmake -project
 qmake
