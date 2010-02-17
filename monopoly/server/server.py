@@ -55,6 +55,13 @@ class LoadGame(RequestHandler):
     def get(self):
         pass
     
+class ConnectToServer(RequestHandler):
+    def post(self):
+        pass
+
+class DisconnectFromServer(RequestHandler):
+    def post(self):
+        pass
 
 app = WSGIApplication(
     [("/game/create", CreateGame),
