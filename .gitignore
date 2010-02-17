@@ -8,3 +8,6 @@ Makefile
 *.kpf
 *.pyc
 index.yaml
+ui_*.h
+qrc_resources.cpp
+moc_*
