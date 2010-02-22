@@ -90,6 +90,7 @@ CardStack *Board::createCardStack(std::string type)
         }
 
     }
+    stack->shuffle();
     return stack;
 
 }
@@ -137,7 +138,7 @@ void Board::squareFactory()
         squares.push_back(sqrPtr);
     }
     //give references to each street about other houses in its set
-    for(unsigned int i=0; i <= streets.size(); i++)
+    for(unsigned int i=0; i < streets.size(); i++)
     {
         streets.at(i)->setOthersInSet(getSet(streets.at(i)));
     }
@@ -154,7 +155,7 @@ HouseSet* Board::getSet(Street *thisStreet)
 {
     HouseSet* houseset;
     std::vector<Street *> streetList;
-    for(unsigned int i=0; i <= streets.size(); i++)
+    for(unsigned int i=0; i < streets.size(); i++)
     {
         if(streets.at(i)->getSet() == thisStreet->getSet() &&
             thisStreet != streets.at(i))

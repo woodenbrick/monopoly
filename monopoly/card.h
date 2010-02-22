@@ -23,6 +23,7 @@ public:
     Card(int id, QString text, bool isGojfc, int streetRepairs, int money,
          bool playerTransfer, int squareId);
     void setDestinationSquare(Square* destination);
+    void printCard();
 
 };
 
@@ -31,7 +32,7 @@ class CardStack
 {
     std::vector<Card *> deck;
     std::vector<Card *> usedCards;
-    std::vector<Card>::iterator iter;
+    std::vector<Card *>::iterator iter;
     void addToDiscardPile(Card *card);
 
 public:

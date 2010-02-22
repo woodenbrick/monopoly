@@ -13,6 +13,10 @@ Card::Card(int id, QString text, bool isGojfc, int streetRepairs,
     this->money = money;
     this->playerTransfer = playerTransfer;
     this->squareId = squareId;
+}
+
+void Card::printCard()
+{
     std::cout << "id: " << id << "\n" << text.toStdString() << "\nGOJFC: " << isGojfc << "\nStreet repairs: "
             << streetRepairs << "\nMoney:" << money << "\nPlayer Transfer: " << playerTransfer <<
             "\nSquare Id: " << squareId << std::endl;
@@ -32,6 +36,10 @@ CardStack::CardStack()
 void CardStack::shuffle()
 {
     std::random_shuffle(deck.begin(), deck.end());
+    for(iter=deck.begin(); iter != deck.end(); iter++)
+    {
+        (*iter)->printCard();
+    }
 }
 
 void CardStack::addToStack(Card *card)
