@@ -60,15 +60,16 @@ QString CardStack::pickup(Player *player)
     {
         //payment to others/others to self
         //negative money amounts indicate a payment, positive a receipt
-        for(int i=0; i<player->otherPlayers->size(); i++)
+        for(std::vector<Player*>::iterator iter=player->otherPlayers->begin();
+        iter != player->otherPlayers->end(); iter++)
         {
             if(currentCard->money < 0)
             {
-                player->createDebt(std::abs(currentCard->money), player->otherPlayers->at(i));
+                player->createDebt(std::abs(currentCard->money), *iter);
             }
             else
             {
-                player->otherPlayers->at(i)->createDebt(currentCard->money, player);
+                (*iter)->createDebt(currentCard->money, player);
             }
         }
     }

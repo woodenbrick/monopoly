@@ -34,7 +34,8 @@ bool Square::isStreet()
 
 bool Square::isEqual(Square *otherSquare)
 {
-    //return true if these squares refer to the same object
+    //XXX dummy return
+    //true if these squares refer to the same object
     return true;
 }
 
@@ -149,10 +150,10 @@ bool HouseSet::canAddHouse(Street *street)
 {
     //check that other properties have equal or 1 more house
 
-    for(int i=0; i <=propSet.size(); i++)
+    for(std::vector<Street*>::iterator iter=propSet.begin(); iter != propSet.end(); iter++)
     {
-        if(propSet.at(i)->getHouseCount() < street->getHouseCount() ||
-           propSet.at(i)->getHouseCount() > street->getHouseCount() + 1)
+        if((*iter)->getHouseCount() < street->getHouseCount() ||
+           (*iter)->getHouseCount() > street->getHouseCount() + 1)
         {
             return false;
         }
@@ -170,10 +171,10 @@ bool HouseSet::canAddHouse(Street *street)
 bool HouseSet::canRemoveHouse(Street *street)
 {
     //check that other properties have equal or 1 less house
-    for(int i=0; i <=propSet.size(); i++)
+    for(std::vector<Street*>::iterator iter=propSet.begin(); iter != propSet.end(); iter++)
     {
-        if(propSet.at(i)->getHouseCount() > street->getHouseCount() ||
-           propSet.at(i)->getHouseCount() < street->getHouseCount() - 1)
+        if((*iter)->getHouseCount() > street->getHouseCount() ||
+           (*iter)->getHouseCount() < street->getHouseCount() - 1)
         {
             return false;
         }
@@ -221,7 +222,7 @@ int Utility::returnRent(int lastRoll)
     {
         multiplier = 10;
     }
-    return rent * multiplier;
+    return lastRoll * multiplier;
 
 }
 

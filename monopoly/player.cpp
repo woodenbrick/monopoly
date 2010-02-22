@@ -17,6 +17,16 @@ Player::Player(QString name, Square *currentSquare, int money, QString counter)
     dice = new Dice();
 }
 
+bool Player::operator ==(const Player &other) const
+{
+    return getName() == other.getName();
+}
+
+bool Player::operator !=(const Player &other) const
+{
+    return !(*this == other);
+}
+
 void Player::makeOffer(Offer *offer)
 {
 
@@ -24,15 +34,16 @@ void Player::makeOffer(Offer *offer)
 
 bool Player::hasSet()
 {
-
+    //XXX dummy return
+    return true;
 }
 
 int Player::propertiesInSetOwned(const QString setName)
 {
     int counter = 0;
-    for(int i=0; i<properties.size(); i++)
+    for(std::vector<Property*>::iterator iter=properties.begin(); iter!=properties.end(); iter++)
     {
-        if(properties.at(i)->getSet() == setName)
+        if((*iter)->getSet() == setName)
         {
             counter ++;
         }
@@ -70,7 +81,10 @@ void Player::createDebt(int amount, Player *player)
     }
 }
 
-
+QString Player::getName() const
+{
+    return name;
+}
 
 void Player::createDebt(int amount)
 {
@@ -109,11 +123,11 @@ int Player::returnBuildingCount(bool isHotelCount=false)
     Street* strPtr;
     int counter = 0;
     int houses;
-    for(int i=0; i<sizeof(properties); i++)
+    for(std::vector<Property*>::iterator iter=properties.begin(); iter !=properties.end(); iter++)
     {
         //get a Street pointer from the property pointer
-        if(properties.at(i)->isStreet()){continue;} //railway or utility
-        strPtr = static_cast<Street*>(properties.at(i));
+        if(! (*iter)->isStreet()){continue;} //railway or utility
+        strPtr = static_cast<Street*>(*iter);
         houses = strPtr->getHouseCount();
         if(!isHotelCount)
         {
@@ -134,7 +148,7 @@ int Player::returnHotelCount()
 
 int Player::returnHouseCount()
 {
-    returnBuildingCount();
+    return returnBuildingCount();
 }
 
 
@@ -219,7 +233,7 @@ void PurchaseTracker::addPurchase(Property* property)
     currentPurchase = getPurchase(property);
     if(!currentPurchase)
     {
-        currentPurchase = &Purchase(property);
+        currentPurchase =  new Purchase(property);
         purchases.push_back(currentPurchase);
     }
     currentPurchase->addHouse();
@@ -241,13 +255,14 @@ void PurchaseTracker::cancelPurchases()
 
 Purchase* PurchaseTracker::getPurchase(Property *property)
 {
-    for(int i=0; i<sizeof(purchases); i++)
+    for(std::vector<Purchase *>::iterator iter=purchases.begin(); iter!=purchases.end(); iter++)
     {
-        if(purchases.at(i)->getProperty() == property)
+        if((*iter)->getProperty() == property)
         {
-            return purchases.at(i);
+            return *iter;
         }
     }
+    return NULL;
 }
 
 void PurchaseTracker::makePurchases()

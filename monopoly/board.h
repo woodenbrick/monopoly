@@ -28,7 +28,7 @@ class Board
     std::vector<Square*> squares;
     std::vector<Street*> streets;
     std::vector<Player*> players;
-    int turn; //keeps track of whose turn it is
+    std::vector<Player*>::iterator turn;
     CardStack *communityChest;
     CardStack *chance;
     SQLiteWrapper conn;

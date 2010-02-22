@@ -66,7 +66,7 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
     for(it = namesAndImages.begin(); it < namesAndImages.end(); it++)
         playerPtr = new Player(QString("Daniel"), go, settings->getCash(), QString("Hat.png"));
         players.push_back(playerPtr);
-    turn = 0;
+    turn = players.begin();
 
 
 }
@@ -137,12 +137,9 @@ void Board::squareFactory()
         squares.push_back(sqrPtr);
     }
     //give references to each street about other houses in its set
-    for(int i=0; i<streets.size(); i++)
+    for(unsigned int i=0; i <= streets.size(); i++)
     {
-        if(streets.at(i)->isStreet())
-        {
-            streets.at(i)->setOthersInSet(getSet(streets.at(i)));
-        }
+        streets.at(i)->setOthersInSet(getSet(streets.at(i)));
     }
     //give references to each player about the other players
 
@@ -157,10 +154,10 @@ HouseSet* Board::getSet(Street *thisStreet)
 {
     HouseSet* houseset;
     std::vector<Street *> streetList;
-    for(int i=0; i<streets.size(); i++)
+    for(unsigned int i=0; i <= streets.size(); i++)
     {
         if(streets.at(i)->getSet() == thisStreet->getSet() &&
-           ! thisStreet->isEqual(streets.at(i)))
+            thisStreet != streets.at(i))
         {
             streetList.push_back(streets.at(i));
         }
@@ -173,15 +170,15 @@ HouseSet* Board::getSet(Street *thisStreet)
 
 Player* Board::getCurrentPlayer()
 {
-    return players.at(turn);
+    return *turn;
 }
 
 Player* Board::nextPlayer()
 {
     turn++;
-    if(turn == players.size())
+    if(turn == players.end())
     {
-        turn = 0;
+        turn = players.begin();
     }
     return getCurrentPlayer();
 }
@@ -189,11 +186,11 @@ Player* Board::nextPlayer()
 std::vector<Player*>* Board::getOtherPlayers(Player *player)
 {
     std::vector<Player*> *otherPlayers;
-    for(int i=0; i<players.size(); i++)
+    for(std::vector<Player*>::iterator iter=players.begin(); iter != players.end(); iter++)
     {
-        if(&players.at(i) != &player)
+        if(*(*iter) != *player)
         {
-            otherPlayers->push_back(players.at(i));
+            otherPlayers->push_back(player);
         }
     }
     return otherPlayers;

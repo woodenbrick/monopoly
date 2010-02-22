@@ -66,6 +66,8 @@ public:
     Player *creditor;
     int debt;
     Player(QString name, Square *currentSquare, int money, QString counter);
+    bool operator==(const Player &other) const;
+    bool operator!=(const Player &other) const;
     void makeOffer(Offer *offer);
     bool hasSet();
     int propertiesInSetOwned(const QString setName);
@@ -74,6 +76,7 @@ public:
     int returnHouseCount();
     int returnHotelCount();
     int getMoney();
+    QString getName() const;
     void createDebt(int amount, Player *player);
     void createDebt(int amount);
     void acquireGojfc(Card *card);
