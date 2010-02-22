@@ -54,7 +54,14 @@ class SaveGame(RequestHandler):
 class LoadGame(RequestHandler):
     def get(self):
         pass
-    
+
+class ListUsers(RequestHandler):
+    def get(self):
+        users = models.User.all().filter("online =", True).fetch(1000)
+        count = len(users)
+        self.response.headers['Content-Type'] = "text/xml"
+        self.response.out.write(render("templates/userlist.xml", {"count" : count,
+                                                                  "users" : users}))
 class ConnectToServer(RequestHandler):
     def post(self):
         pass
@@ -68,7 +75,10 @@ app = WSGIApplication(
     ("/game/list", ListGames),
     ("/game/leave", LeaveGame),
     ("/game/join", JoinGame),
-    ("/user/create", NewUser)
+    ("/user/create", NewUser),
+    ("/user/list", ListUsers),
+    ("/user/connect", ConnectToServer),
+    ("/user/disconnect", DisconnectFromServer),
     ],
     debug=True
     

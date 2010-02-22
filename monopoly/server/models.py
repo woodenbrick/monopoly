@@ -6,6 +6,7 @@ class User(db.Model):
     name = db.StringProperty()
     password = db.StringProperty()
     email = db.EmailProperty()
+    online = db.BooleanProperty()
     
 
 class NewGame(db.Model):

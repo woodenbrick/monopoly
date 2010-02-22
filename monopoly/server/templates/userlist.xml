@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<users count="{{count}}">
+    {% for user in users %}
+    <user>{{user.name}}</user>
+    {% endfor %}
+<users>
