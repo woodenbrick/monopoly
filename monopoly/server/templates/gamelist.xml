@@ -4,7 +4,7 @@
     <game id="{{game.game_id}}">
         <status>{{game.status}}</status>
         <creator>{{game.creator.name}}</creator>
-        <ip>{{ip}}</ip>
+        <ip>{{game.ip}}</ip>
         <locale>{{game.locale}}</locale>
         <min_players>{{game.min_players}}</min_players>
         <max_players>{{game.max_players}}</max_players>

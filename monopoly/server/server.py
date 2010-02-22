@@ -21,11 +21,11 @@ class CreateGame(RequestHandler):
         min_players = int(self.request.get("min"))
         max_players = int(self.request.get("max"))
         locale = self.request.get("locale")
-        game = models.NewGame(game_id=game_id, creator=creator, ip=self.request.remote_addr,
+        game = models.NewGame(game_id=game_id, creator=creator,
+                              ip=self.request.remote_addr,
                               locale=locale, current_player_count=1, current_player_names=[creator.name],
                        status="available", min_players=min_players, max_players=max_players)
         game.put()
-        
 class ListGames(RequestHandler):
     def get(self):
         games = models.NewGame.all().filter("status =", "available").fetch(100)
