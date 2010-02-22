@@ -36,6 +36,9 @@ class ListGames(RequestHandler):
 class JoinGame(RequestHandler):
     def post(self):
         game = models.NewGame.all().filter("game_id =", self.request.get("game_id")).get()
+        if game is None:
+            self.response.out.write("Error: No game with this name")
+            return
         user = self.request.get("name")
         game.current_player_names.append(user)
         game.current_player_count += 1
@@ -64,11 +67,18 @@ class ListUsers(RequestHandler):
                                                                   "users" : users}))
 class ConnectToServer(RequestHandler):
     def post(self):
-        pass
+        name = self.request.get("name")
+        change_online_status(name, True)
 
 class DisconnectFromServer(RequestHandler):
     def post(self):
-        pass
+        name = self.request.get("name")
+        change_online_status(name, False)
+
+def change_online_status(name, status):
+    user = models.User.all().filter("name =", name).get()
+    user.online = status
+    user.put()
 
 app = WSGIApplication(
     [("/game/create", CreateGame),
