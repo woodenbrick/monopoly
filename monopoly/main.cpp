@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
     QString locale = "UK";
 
     //create windows
-    BoardGui *boardgui = new BoardGui(locale);
-    boardgui->show();
+    //BoardGui *boardgui = new BoardGui(locale);
+    //boardgui->show();
 
     Lobby *lobby= new Lobby;
     lobby->show();

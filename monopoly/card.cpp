@@ -38,7 +38,7 @@ void CardStack::shuffle()
     std::random_shuffle(deck.begin(), deck.end());
     for(iter=deck.begin(); iter != deck.end(); iter++)
     {
-        (*iter)->printCard();
+        //(*iter)->printCard();
     }
 }
 
