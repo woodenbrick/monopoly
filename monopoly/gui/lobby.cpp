@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 
-char* REMOTEHOST = "http://localhost:8080/game/list";
+char* REMOTEHOST = "http://monopolyserver.appspot.com/game/list";
 
 using namespace std;
 Lobby::Lobby(QWidget *parent) : QDialog(parent)
