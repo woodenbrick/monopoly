@@ -11,20 +11,18 @@
 class Game
 {
     QString id;
-    string status;
+    QString status;
     QString creator;
-    string locale;
+    QString locale;
     int min;
     int max;
+    QString range; //max and min in string form
     int current;
-    string playerNames;
+    QString playerNames;
 public:
     Game(rapidxml::xml_node<> *game);
     QString getId();
-    QList<QStandardItem*> getData();
-    void printout();
-
-
+    QString getData();
 };
 
 class Games

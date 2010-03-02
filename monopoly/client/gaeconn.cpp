@@ -18,7 +18,7 @@ Game::Game(rapidxml::xml_node<> *game)
     id = QString(game->first_attribute("id")->value());
     status = game->first_node("status")->value();
     creator = QString(game->first_node("creator")->value());
-    locale = game->first_node("locale")->value();
+    locale = QString(game->first_node("locale")->value());
     min = atoi(game->first_node("min_players")->value());
     max = atoi(game->first_node("max_players")->value());
     rapidxml::xml_node<> *players = game->first_node("players");
@@ -33,14 +33,14 @@ Game::Game(rapidxml::xml_node<> *game)
 }
 
 
-void Game::printout()
-{
-    cout << "ID:" << id.toStdString() << "\nStatus:" << status << "\nCreator:" << creator.toStdString()
-            << "\nLocale:" <<
-            locale << "\nMin:" <<
-            min << "\nMax:" << max << "\nCurrent Players:" << current << "\nPlayer Names:\n" <<
-            playerNames << endl;
-}
+//void Game::printout()
+//{
+//    cout << "ID:" << id.toStdString() << "\nStatus:" << status << "\nCreator:" << creator.toStdString()
+//            << "\nLocale:" <<
+//            locale << "\nMin:" <<
+//            min << "\nMax:" << max << "\nCurrent Players:" << current << "\nPlayer Names:\n" <<
+//            playerNames << endl;
+//}
 
 
 QString Game::getId()
@@ -48,12 +48,12 @@ QString Game::getId()
     return id;
 }
 
-QList<QStandardItem*> Game::getData()
+QString Game::getData()
 {
-    QList<QStandardItem*> lst;
-    lst.append(new QStandardItem(id));
-    lst.append(new QStandardItem(creator));
-    return lst;
+    QString s = QString(id + "\nCreator: " + creator + "\nLocale: " + locale +
+                        "\nMin/Max: %1/%2\nStatus: " + status + "\nCurrent Players (%3): "
+                        + playerNames).arg(min).arg(max).arg(current);
+    return s;
 
 }
 

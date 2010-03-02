@@ -13,14 +13,17 @@ Lobby::Lobby(QWidget *parent) : QDialog(parent)
     show();
     model = new QStandardItemModel(this);
     gameList->setModel(model);
-    checkGameServer();
-    checkGameServer();
+    //model->setColumnCount(7);
+    //model->setVerticalHeaderItem();;
+    //gameList->setColumnHidden(1, true);
     show();
+    checkGameServer();
 
 }
 
 void Lobby::checkGameServer()
 {
+    statusBar->setText("Updating game list");
     string xml = urlRetrieve(REMOTEHOST);
     char *a=new char[xml.size()+1];
     a[xml.size()]=0;
@@ -28,7 +31,6 @@ void Lobby::checkGameServer()
     doc.parse<0>(a);
     xmlIter = doc.first_node("games")->first_node();
     bool isFound;
-    model->clear();
     while(xmlIter)
     {
         Game *g = new Game(xmlIter);
@@ -37,13 +39,14 @@ void Lobby::checkGameServer()
         if(!isFound)
         {
             //QIcon icon(":/boot");
-            QStandardItem *item = new QStandardItem("Happ");
-            model->appendRow(g->getData());
+            //QStandardItem *item = new QStandardItem("Happ");
+            model->appendRow(new QStandardItem(g->getData()));
 
         }
         xmlIter = xmlIter->next_sibling();
     }
-    //for(gameIter=games->begin(); gameIter != games->end(); gameIter++)
+    //model->setStringList(list);
+    statusBar->setText("...");
 
 }
 
