@@ -4,19 +4,17 @@
 #include <cstdlib>
 
 
-char* REMOTEHOST = "http://monopolyserver.appspot.com/game/list";
 
 using namespace std;
 Lobby::Lobby(QWidget *parent) : QDialog(parent)
 {
+    url = "http://monopolyserver.appspot.com/game/list";
     setupUi(this);
     show();
     model = new QStandardItemModel(this);
     gameList->setModel(model);
-    //model->setColumnCount(7);
-    //model->setVerticalHeaderItem();;
-    //gameList->setColumnHidden(1, true);
     show();
+    connect(&conn, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseGameList(QNetworkReply*)));
     checkGameServer();
 
 }
@@ -24,33 +22,82 @@ Lobby::Lobby(QWidget *parent) : QDialog(parent)
 void Lobby::checkGameServer()
 {
     statusBar->setText("Updating game list");
-    string xml = urlRetrieve(REMOTEHOST);
-    char *a=new char[xml.size()+1];
-    a[xml.size()]=0;
-    memcpy(a, xml.c_str(), xml.size());
-    doc.parse<0>(a);
-    xmlIter = doc.first_node("games")->first_node();
-    bool isFound;
-    while(xmlIter)
+    request.setUrl(url);
+    reply = conn.get(request);
+}
+
+void Lobby::parseGameList(QNetworkReply *)
+{
+    if(reply->error() != QNetworkReply::NoError)
+        statusBar->setText(reply->errorString());
+    else
     {
-        Game *g = new Game(xmlIter);
-        cout << g->getId().toStdString() << endl;
-        isFound = false;
-        if(!isFound)
+        statusBar->setText("Last updated at :" + QTime().currentTime().toString());
+        QXmlStreamReader doc(reply);
+        while(!doc.atEnd())
         {
-            //QIcon icon(":/boot");
-            //QStandardItem *item = new QStandardItem("Happ");
-            model->appendRow(new QStandardItem(g->getData()));
-
+            qDebug() << "T" << doc.name().toString();
+            token = doc.readNext();
+            if(token == QXmlStreamReader::StartDocument)
+                continue;
+            if(token == QXmlStreamReader::StartElement)
+            {
+                if(doc.name() == "game")
+                {
+                Game* game = new Game(doc);
+                model->appendRow(game->getData());
+                }
+            }
         }
-        xmlIter = xmlIter->next_sibling();
     }
-    //model->setStringList(list);
-    statusBar->setText("...");
-
+    emit parseComplete();
+    qDebug("Parsing complete");
 }
 
 void Lobby::on_buttonExit_clicked()
 {
     this->destroy();
+}
+
+
+
+Game::Game(QXmlStreamReader &game)
+{
+
+    id = game.attributes().value("id").toString();
+    game.readNext();
+    status = game.text().toString();
+    game.readNext();
+    creator = game.text().toString();
+    game.readNext();
+    locale = game.text().toString();
+    game.readNext();
+    min = game.text().toString().toInt();
+    game.readNext();
+    max = game.text().toString().toInt();
+    game.readNext();
+    current = game.text().toString().toInt();
+    QXmlStreamReader::TokenType token = game.readNext();
+    while(token != QXmlStreamReader::EndElement && game.name() != "players")
+    {
+        playerNames.append(game.text());
+        playerNames.append("\n");
+        token = game.readNext();
+    }
+}
+
+
+QString Game::getId()
+{
+    return id;
+}
+
+QStandardItem* Game::getData()
+{
+    QString s = QString(id + "\nCreator: " + creator + "\nLocale: " + locale +
+                        "\nMin/Max: %1/%2\nStatus: " + status + "\nCurrent Players (%3): "
+                        + playerNames).arg(min).arg(max).arg(current);
+    QStandardItem *item = new QStandardItem(s);
+    return item;
+
 }

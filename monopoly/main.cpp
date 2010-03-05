@@ -32,8 +32,8 @@ int main(int argc, char* argv[])
     player.push_back("Lewis");
     player.push_back("Dog");
     Board *board = new Board(locale, players);
-    int total = board->getCurrentPlayer()->dice->roll();
-    std::cout << total;
-    std::cout << board->getCurrentPlayer()->dice->getLastRollString().toStdString();
+    //int total = board->getCurrentPlayer()->dice->roll();
+    //std::cout << total;
+    //std::cout << board->getCurrentPlayer()->dice->getLastRollString().toStdString();
     return app.exec();
 }

@@ -2,10 +2,6 @@
 #include "stdio.h"
 #include <stdio.h>
 #include <iostream>
-//    std::vector<Square> square;
-//    CardStack *communityChest;
-//   CardStack *chance;
-//std::vector<Player> players;
 
 
 Settings::Settings(int cash, int goMoney, int superTax, QString currencySymbol)
@@ -41,24 +37,20 @@ int Settings::getSuperTax()
 
 Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
 {
-    QString database = "resources/db/";
+    QString database("resources/db/");
     database.append(locale).append(".sqlite");
-    std::string db = std::string(database.toLatin1());
-    if(conn.Open(db))
-    {
-        std::cout << "database loaded" << std::endl;
-    }
-    else
-    {
-        std::cout << "Couldn't load database: " << std::endl;
-    }
-    statement = conn.Statement("select cash, go, super, currency from settings");
-    statement->NextRow();
-    QString currency = statement->ValueQString(3);
-    settings = new Settings(statement->ValueInt(0), statement->ValueInt(1), statement->ValueInt(2), currency);
+    conn = QSqlDatabase::addDatabase("QSQLITE");
+    conn.setDatabaseName(database);
+    conn.open();
+    QSqlQuery query;
+    query.exec("select cash, go, super, currency from settings");
+    query.next();
+    settings = new Settings(query.value(0).toInt(), query.value(1).toInt(),
+                            query.value(2).toInt(), query.value(3).toString());
     squareFactory();
-    communityChest = createCardStack("community_chest");
-    chance = createCardStack("chance");
+    communityChest = createCardStack(QString("community_chest"));
+    chance = createCardStack(QString("chance"));
+    conn.close();
     //get Go square for players to start on
     Square* go = getSquare(0);
     std::vector<std::vector<QString> >::iterator it;
@@ -71,22 +63,24 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
 
 }
 
-CardStack *Board::createCardStack(std::string type)
+CardStack *Board::createCardStack(QString type)
 {
     CardStack *stack = new CardStack;
-    if(type == "chance"){ statement = conn.Statement("select id, text, isGojfc, streetRepairs, money, playerTrans, square from chance");}
-    else{statement = conn.Statement("select id, text, isGojfc, streetRepairs, money, playerTrans, square from community_chest");}
-    while (statement->NextRow())
+    QSqlQuery query;
+    query.prepare("select id, text, isGojfc, streetRepairs, money, playerTrans, square from ?");
+    query.bindValue(0, type);
+    query.exec();
+    while (query.next())
     {
-        Card *card = new Card(statement->ValueInt(0), statement->ValueQString(1),
-                              statement->ValueBool(2), statement->ValueInt(3),
-                              statement->ValueInt(4), statement->ValueBool(5),
-                              statement->ValueInt(6));
+        Card *card = new Card(query.value(0).toInt(), query.value(1).toString(),
+                              query.value(2).toBool(), query.value(3).toInt(),
+                              query.value(4).toInt(), query.value(5).toBool(),
+                              query.value(6).toInt());
         stack->addToStack(card);
         //if the card requires movement, set the destination square
-        if(statement->ValueInt(6) >= 0)
+        if(query.value(6).toInt() >= 0)
         {
-            card->setDestinationSquare(getSquare(statement->ValueInt(6)));
+            card->setDestinationSquare(getSquare(query.value(6).toInt()));
         }
 
     }
@@ -97,40 +91,41 @@ CardStack *Board::createCardStack(std::string type)
 
 void Board::squareFactory()
 {
-    statement = conn.Statement(
+    QSqlQuery query;
+    query.exec(
             "select id, name, price, _set, street.rent, street.one, street.two, street.three, street.four, "
             "street.five from squares LEFT OUTER JOIN street ON squares.id = street.square_id");
     Square* sqrPtr;
     Street* ptyPtr;
     std::vector<int> rents;
     //_set is one of None|B|LB|P|O|R|Y|G|DB|RR|UT
-    while(statement->NextRow())
+    while(query.next())
     {
-        QString name = QString(statement->ValueString(1).c_str());
-        QString set = QString(statement->ValueString(3).c_str());
-        if(statement->ValueString(2) == "None")
+        int id = query.value(0).toInt();
+        QString name = query.value(1).toString();
+        QString set = query.value(3).toString();
+        if(set == "None")
         {
-            sqrPtr = new Square(statement->ValueInt(0), name, set);
+            sqrPtr = new Square(id, name, set);
         }
-
-        else if(statement->ValueString(2) == "RR")
+        else if(set == "RR")
         {
-            sqrPtr = new Railway(statement->ValueInt(0), name, statement->ValueInt(2),
-                              set, statement->ValueInt(4));
+            sqrPtr = new Railway(id, name, query.value(2).toInt(),
+                              set, query.value(4).toInt());
         }
-        else if(statement->ValueString(2) == "UT")
+        else if(set == "UT")
         {
-            sqrPtr = new Utility(statement->ValueInt(0), name, statement->ValueInt(2),
-                               set, statement->ValueInt(4));
+            sqrPtr = new Utility(id, name, query.value(2).toInt(),
+                               set, query.value(4).toInt());
         }
         else
         {
              rents.clear();
              for(int i=4; i<10; i++)
              {
-                 rents.push_back(statement->ValueInt(i));;
+                 rents.push_back(query.value(i).toInt());
              }
-             sqrPtr = new Street(statement->ValueInt(0), name, statement->ValueInt(2),
+             sqrPtr = new Street(id, name, query.value(2).toInt(),
                                 set, rents);
              ptyPtr = static_cast<Street*>(sqrPtr);
              streets.push_back(ptyPtr);
@@ -142,7 +137,7 @@ void Board::squareFactory()
     {
         streets.at(i)->setOthersInSet(getSet(streets.at(i)));
     }
-    //give references to each player about the other players
+    //XXX give references to each player about the other players
 
 }
 

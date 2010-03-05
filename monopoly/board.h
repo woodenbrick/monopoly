@@ -2,11 +2,12 @@
 #define BOARD_H
 
 #include <QString>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
 #include <vector>
 #include "square.h"
 #include "card.h"
 #include "player.h"
-#include "lib/sqlitewrapper.h"
 
 class Settings
 {
@@ -31,13 +32,12 @@ class Board
     std::vector<Player*>::iterator turn;
     CardStack *communityChest;
     CardStack *chance;
-    SQLiteWrapper conn;
-    SQLiteStatement *statement;
+    QSqlDatabase conn;
     Settings *settings;
 
 
 public:
-    CardStack *createCardStack(std::string type);
+    CardStack *createCardStack(QString type);
     Board(QString locale, std::vector<std::vector<QString> > namesAndImages);
     Square* getSquare(int id);
     HouseSet* getSet(Street *thisStreet);
