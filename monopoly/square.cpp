@@ -80,12 +80,13 @@ bool Property::unmortgage()
 
 
 
-Street::Street(int id, QString &name, int purchasePrice, QString &set, std::vector <int> &rent)
+Street::Street(int id, QString &name, int purchasePrice, QString &set,
+               std::vector <int> &rent, QString fgColor, QString bgColor)
     : Property(id, name, purchasePrice, set)
 {
-    //this->rent[0] = rent;
     this->rent = rent;
-    //this->rent[5] = rent;
+    this->fgColor = QColor(fgColor);
+    this->bgColor = QColor(bgColor);
 }
 
 
@@ -138,7 +139,15 @@ void Street::setOthersInSet(HouseSet *houseset)
     othersInSet = houseset;
 }
 
+QColor Street::getBackgroundColor()
+{
+    return bgColor;
+}
 
+QColor Street::getForegroundColor()
+{
+    return fgColor;
+}
 
 HouseSet::HouseSet(std::vector<Street*> set)
 {

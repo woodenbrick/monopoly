@@ -2,6 +2,7 @@
 #define SQUARE_H
 
 #include <QString>
+#include <QColor>
 #include <vector>
 
 class Player;
@@ -48,10 +49,13 @@ protected:
     std::vector <int> rent;
     int houses;
     int houseCost;
+    QColor bgColor;
+    QColor fgColor;
     HouseSet *othersInSet;
 
 public:
-    Street(int id, QString &name, int purchasePrice, QString &set, std::vector <int> &rent);
+    Street(int id, QString &name, int purchasePrice, QString &set,
+           std::vector <int> &rent, QString fgcolor, QString bgcolor);
     bool buyHouses(int amount);
     void sellHouses(int amount);
     int getHouseCount();
@@ -59,6 +63,8 @@ public:
     int returnRent();
     HouseSet* getOthersInSet();
     void setOthersInSet(HouseSet *houseSet);
+    QColor getBackgroundColor();
+    QColor getForegroundColor();
 };
 
 class HouseSet

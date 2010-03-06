@@ -10,9 +10,6 @@ Settings::Settings(int cash, int goMoney, int superTax, QString currencySymbol)
     this->goMoney = goMoney;
     this->superTax = superTax;
     this->currencySymbol = currencySymbol;
-    std::cout << "Settings:\n" << "Starting cash: " << cash << "\nGo Money: "
-            << goMoney << "\nSuper tax: " << superTax << "\nCurrency symbol: "
-            << currencySymbol.toStdString() << std::endl;
 }
 
 int Settings::getCash()
@@ -94,8 +91,11 @@ void BoardData::squareFactory()
 {
     QSqlQuery query;
     query.exec(
-            "select id, name, price, _set, street.rent, street.one, street.two, street.three, street.four, "
-            "street.five from squares LEFT OUTER JOIN street ON squares.id = street.square_id");
+            "select squares.id, squares.name, squares.price, squares._set, "
+            "street.rent, street.one, street.two, street.three, street.four, "
+            "street.five, property_colours.bgcolour, property_colours.fgcolour "
+            "from squares LEFT OUTER JOIN street ON squares.id = street.square_id "
+            "LEFT OUTER JOIN property_colours ON squares.id = property_colours.ID");
     Square* sqrPtr;
     Street* ptyPtr;
     std::vector<int> rents;
@@ -127,7 +127,8 @@ void BoardData::squareFactory()
                  rents.push_back(query.value(i).toInt());
              }
              sqrPtr = new Street(id, name, query.value(2).toInt(),
-                                set, rents);
+                                set, rents, query.value(10).toString(),
+                                query.value(11).toString());
              ptyPtr = static_cast<Street*>(sqrPtr);
              streets.push_back(ptyPtr);
         }
