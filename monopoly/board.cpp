@@ -35,7 +35,7 @@ int Settings::getSuperTax()
     return superTax;
 }
 
-Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
+BoardData::BoardData(QString locale, std::vector<std::vector<QString> > namesAndImages)
 {
     QString database("resources/db/");
     database.append(locale).append(".sqlite");
@@ -64,7 +64,7 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
 
 }
 
-CardStack *Board::createCardStack(QString type)
+CardStack *BoardData::createCardStack(QString type)
 {
     CardStack *stack = new CardStack;
     QSqlQuery query;
@@ -90,7 +90,7 @@ CardStack *Board::createCardStack(QString type)
 
 }
 
-void Board::squareFactory()
+void BoardData::squareFactory()
 {
     QSqlQuery query;
     query.exec(
@@ -142,12 +142,12 @@ void Board::squareFactory()
 
 }
 
-Square* Board::getSquare(int id)
+Square* BoardData::getSquare(int id)
 {
     return squares.at(id);
 }
 
-HouseSet* Board::getSet(Street *thisStreet)
+HouseSet* BoardData::getSet(Street *thisStreet)
 {
     HouseSet* houseset;
     std::vector<Street *> streetList;
@@ -165,12 +165,12 @@ HouseSet* Board::getSet(Street *thisStreet)
 }
 
 
-Player* Board::getCurrentPlayer()
+Player* BoardData::getCurrentPlayer()
 {
     return *turn;
 }
 
-Player* Board::nextPlayer()
+Player* BoardData::nextPlayer()
 {
     turn++;
     if(turn == players.end())
@@ -180,7 +180,7 @@ Player* Board::nextPlayer()
     return getCurrentPlayer();
 }
 
-std::vector<Player*>* Board::getOtherPlayers(Player *player)
+std::vector<Player*>* BoardData::getOtherPlayers(Player *player)
 {
     std::vector<Player*> *otherPlayers;
     for(std::vector<Player*>::iterator iter=players.begin(); iter != players.end(); iter++)

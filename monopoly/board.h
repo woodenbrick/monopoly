@@ -1,5 +1,5 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef board_H
+#define board_H
 
 #include <QString>
 #include <QtSql/QSqlDatabase>
@@ -24,7 +24,7 @@ public:
     QString getCurrencySymbol();
 };
 
-class Board
+class BoardData
 {
     std::vector<Square*> squares;
     std::vector<Street*> streets;
@@ -38,7 +38,7 @@ class Board
 
 public:
     CardStack *createCardStack(QString type);
-    Board(QString locale, std::vector<std::vector<QString> > namesAndImages);
+    BoardData(QString locale, std::vector<std::vector<QString> > namesAndImages);
     Square* getSquare(int id);
     HouseSet* getSet(Street *thisStreet);
     void squareFactory();
@@ -48,4 +48,4 @@ public:
 };
 
 
-#endif // BOARD_H
+#endif // board_H

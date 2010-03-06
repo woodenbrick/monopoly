@@ -67,17 +67,13 @@ Game::Game(QXmlStreamReader &game)
     game.readNext();
     while(game.name() != "game")
     {        
-        qDebug() << game.name().toString() << game.tokenString() << game.text().toString();
-
         if(game.tokenType() != QXmlStreamReader::StartElement)
         {
             game.readNext();
             continue;
         }
-        if(game.name() == "status"){
-
-            qDebug() << "Reading status";
-            status = game.readElementText();}
+        if(game.name() == "status")
+            status = game.readElementText();
         if(game.name() == "creator")
             creator = game.readElementText();
         if(game.name() == "locale")

@@ -16,12 +16,7 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
     QString locale = "UK";
 
-    //create windows
-    BoardGui *boardgui = new BoardGui(locale);
-    boardgui->show();
 
-    Lobby *lobby= new Lobby;
-    lobby->show();
 
     std::vector<std::vector<QString> > players;
     std::vector<QString> player;
@@ -31,7 +26,14 @@ int main(int argc, char* argv[])
     player.clear();
     player.push_back("Lewis");
     player.push_back("Dog");
-    Board *board = new Board(locale, players);
+    BoardData *board = new BoardData(locale, players);
+
+    //create windows
+    BoardGui *boardgui = new BoardGui(locale, board);
+    boardgui->show();
+
+    Lobby *lobby= new Lobby;
+    lobby->show();
     //int total = board->getCurrentPlayer()->dice->roll();
     //std::cout << total;
     //std::cout << board->getCurrentPlayer()->dice->getLastRollString().toStdString();
