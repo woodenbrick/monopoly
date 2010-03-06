@@ -51,6 +51,7 @@ Board::Board(QString locale, std::vector<std::vector<QString> > namesAndImages)
     communityChest = createCardStack(QString("community_chest"));
     chance = createCardStack(QString("chance"));
     conn.close();
+    conn.removeDatabase("QSQLITE");
     //get Go square for players to start on
     Square* go = getSquare(0);
     std::vector<std::vector<QString> >::iterator it;

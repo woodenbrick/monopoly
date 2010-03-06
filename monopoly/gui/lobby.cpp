@@ -36,7 +36,6 @@ void Lobby::parseGameList(QNetworkReply *)
         QXmlStreamReader doc(reply);
         while(!doc.atEnd())
         {
-            qDebug() << "T" << doc.name().toString();
             token = doc.readNext();
             if(token == QXmlStreamReader::StartDocument)
                 continue;
@@ -46,6 +45,7 @@ void Lobby::parseGameList(QNetworkReply *)
                 {
                 Game* game = new Game(doc);
                 model->appendRow(game->getData());
+                qDebug() << game->getData();
                 }
             }
         }
@@ -63,26 +63,43 @@ void Lobby::on_buttonExit_clicked()
 
 Game::Game(QXmlStreamReader &game)
 {
-
     id = game.attributes().value("id").toString();
     game.readNext();
-    status = game.text().toString();
-    game.readNext();
-    creator = game.text().toString();
-    game.readNext();
-    locale = game.text().toString();
-    game.readNext();
-    min = game.text().toString().toInt();
-    game.readNext();
-    max = game.text().toString().toInt();
-    game.readNext();
-    current = game.text().toString().toInt();
-    QXmlStreamReader::TokenType token = game.readNext();
-    while(token != QXmlStreamReader::EndElement && game.name() != "players")
-    {
-        playerNames.append(game.text());
-        playerNames.append("\n");
-        token = game.readNext();
+    while(game.name() != "game")
+    {        
+        qDebug() << game.name().toString() << game.tokenString() << game.text().toString();
+
+        if(game.tokenType() != QXmlStreamReader::StartElement)
+        {
+            game.readNext();
+            continue;
+        }
+        if(game.name() == "status"){
+
+            qDebug() << "Reading status";
+            status = game.readElementText();}
+        if(game.name() == "creator")
+            creator = game.readElementText();
+        if(game.name() == "locale")
+            locale = game.readElementText();
+        if(game.name() == "min_players")
+            min = game.readElementText().toInt();
+        if(game.name() == "max_players")
+            max = game.readElementText().toInt();
+        if(game.name() == "ip")
+            ip = game.readElementText();
+        if(game.name() == "players")
+        {
+            current = game.attributes().value("count").toString().toInt();
+            game.readNext();
+            while(game.name() != "players")
+            {
+                if(game.tokenType() != QXmlStreamReader::StartElement)
+                    game.readNext();
+                playerNames.append(game.readElementText());
+                playerNames.append("\n");
+            }
+        }
     }
 }
 
@@ -94,7 +111,7 @@ QString Game::getId()
 
 QStandardItem* Game::getData()
 {
-    QString s = QString(id + "\nCreator: " + creator + "\nLocale: " + locale +
+    QString s = QString(id + " " + ip + "\nCreator: " + creator + "\nLocale: " + locale +
                         "\nMin/Max: %1/%2\nStatus: " + status + "\nCurrent Players (%3): "
                         + playerNames).arg(min).arg(max).arg(current);
     QStandardItem *item = new QStandardItem(s);

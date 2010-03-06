@@ -30,6 +30,7 @@ private slots:
 class Game
 {
     QString id;
+    QString ip;
     QString status;
     QString creator;
     QString locale;
