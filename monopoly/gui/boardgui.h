@@ -13,15 +13,11 @@ private:
 public:
     BoardGui(QString locale, BoardData* board, QWidget* parent=0);
     void mouseMoveEvent(QMouseEvent* event);
+    int i;
+public slots:
+    void updateCard();
 
 };
 
-
-class PropertyImage : public QPixmap
-{
-public:
-    PropertyImage(QString filename);
-    void paintEvent(QPaintEvent *event);
-};
 
 #endif // BOARDGUI_H

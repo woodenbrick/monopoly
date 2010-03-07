@@ -4,41 +4,31 @@ BoardGui::BoardGui(QString locale, BoardData* board, QWidget *parent) :
         QMainWindow(parent)
 {
     setupUi(this);
+    i=0;
     boardPtr = board;
     QPixmap bpic(QString(":/images/locale/%1/board.png").arg(locale));
-    this->board_pic->setPixmap(bpic);
+    this->board_pic->setPixmap(bpic.scaled(QSize(700, 700)));
     board_pic->show();
-    PropertyImage img(":/images/TitleDeedTemp.png");
-    currentProperty->setPixmap(img);
-    board_pic->setMouseTracking(true);
-    currentProperty->setAutoFillBackground(true);
-    currentProperty->setPalette(QPalette(QColor("black")));
-
+    currentPropertyPic->setAutoFillBackground(true);
+    connect(pushButton_2, SIGNAL(clicked()), this, SLOT(updateCard()));
 
 }
 
 void BoardGui::mouseMoveEvent(QMouseEvent *event)
 {
-    qDebug() << event->pos();
-    Square* square = boardPtr->getSquare(1);
-    square->getName();
-    currentProperty->setPalette(QPalette(QColor("blue")));
-    //toDO: create color change tester
+    //nothing
 
 }
 
-
-PropertyImage::PropertyImage(QString filename) : QPixmap(filename)
+void BoardGui::updateCard()
 {
-
-}
-
-
-
-void PropertyImage::paintEvent(QPaintEvent *event)
-{
-    QPainter painter(this);
-    painter.setBrush(QBrush(Qt::blue, Qt::SolidPattern));
-    painter.drawRect(0, 0, 100, 30);
-    painter.end();
+    Square* square = boardPtr->getSquare(i);
+    currentPropertyPic->setPixmap(square->getPixmap());
+    QPalette palette(square->getBackgroundColor());
+    currentPropertyPic->setPalette(palette);
+    currentPropertyName->setText(square->getName());
+    currentPropertyName->setPalette(palette);
+    currentPropertyText->setText(square->printDetails());
+    i++;
+    if(i==40) i = 0;
 }
