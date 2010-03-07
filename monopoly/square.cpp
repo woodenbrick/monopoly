@@ -1,11 +1,15 @@
 #include "square.h"
 #include "player.h"
+#include "board.h"
 
 Square::Square(int id, QString &name, QString &set)
 {
     this->id = id;
     this->name = name;
     this->set = set;
+    fgColor = QColor("black");
+    bgColor = QColor("white");
+    image = QPixmap(":/images/TitleDeedBackTemp.png");
 }
 
 int Square::getId()
@@ -39,10 +43,38 @@ bool Square::isEqual(Square *otherSquare)
     return true;
 }
 
+Street* Square::toStreet()
+{
+    return static_cast<Street*>(this);
+}
 
-Property::Property(int &id, QString &name, int &purchasePrice, QString &set) : Square(id, name, set)
+QColor Square::getBackgroundColor()
+{
+    return bgColor;
+}
+
+QColor Square::getForegroundColor()
+{
+    return fgColor;
+}
+
+QPixmap Square::getPixmap()
+{
+    return image;
+}
+
+QString Square::printDetails()
+{
+    return QString("");
+}
+
+Property::Property(int &id, QString &name, int &purchasePrice, QString &set, QString currency)
+    : Square(id, name, set)
 {
     this->purchasePrice = purchasePrice;
+    this->currency = currency;
+    image = QPixmap(":/images/TitleDeedTemp.png");
+
 }
 
 
@@ -80,13 +112,13 @@ bool Property::unmortgage()
 
 
 
-Street::Street(int id, QString &name, int purchasePrice, QString &set,
-               std::vector <int> &rent, QString fgColor, QString bgColor)
-    : Property(id, name, purchasePrice, set)
+Street::Street(int id, QString &name, int purchasePrice, QString &set, QString currency,
+               QList <int> &rent, QString bgColor, QString fgColor)
+    : Property(id, name, purchasePrice, set, currency)
 {
     this->rent = rent;
-    this->fgColor = QColor(fgColor);
-    this->bgColor = QColor(bgColor);
+    this->fgColor = QColor("#" + fgColor);
+    this->bgColor = QColor("#" + bgColor);
 }
 
 
@@ -139,17 +171,24 @@ void Street::setOthersInSet(HouseSet *houseset)
     othersInSet = houseset;
 }
 
-QColor Street::getBackgroundColor()
+QString Street::printDetails()
 {
-    return bgColor;
+    QString s;
+    s= QString(
+            "Rent:\t%1\n"
+              "1 House:\t%2\n"
+              "2 Houses:\t%3\n"
+              "3 Houses:\t%4\n"
+              "4 Houses:\t%5\n"
+              "Hotel:\t%6\n");
+    for(QList<int>::const_iterator iter = rent.begin(); iter != rent.end(); iter++)
+    {
+        s = s.arg(currency + QString::number(*iter));
+    }
+    return s;
 }
 
-QColor Street::getForegroundColor()
-{
-    return fgColor;
-}
-
-HouseSet::HouseSet(std::vector<Street*> set)
+HouseSet::HouseSet(QList<Street*> set)
 {
     propSet = set;
 }
@@ -159,7 +198,7 @@ bool HouseSet::canAddHouse(Street *street)
 {
     //check that other properties have equal or 1 more house
 
-    for(std::vector<Street*>::iterator iter=propSet.begin(); iter != propSet.end(); iter++)
+    for(QList<Street*>::const_iterator iter=propSet.begin(); iter != propSet.end(); iter++)
     {
         if((*iter)->getHouseCount() < street->getHouseCount() ||
            (*iter)->getHouseCount() > street->getHouseCount() + 1)
@@ -180,7 +219,7 @@ bool HouseSet::canAddHouse(Street *street)
 bool HouseSet::canRemoveHouse(Street *street)
 {
     //check that other properties have equal or 1 less house
-    for(std::vector<Street*>::iterator iter=propSet.begin(); iter != propSet.end(); iter++)
+    for(QList<Street*>::const_iterator iter=propSet.begin(); iter != propSet.end(); iter++)
     {
         if((*iter)->getHouseCount() > street->getHouseCount() ||
            (*iter)->getHouseCount() < street->getHouseCount() - 1)
@@ -194,8 +233,8 @@ bool HouseSet::canRemoveHouse(Street *street)
 
 
 
-Railway::Railway(int id, QString name, int purchasePrice, QString set, int rent)
-        : Property(id, name, purchasePrice, set)
+Railway::Railway(int id, QString name, int purchasePrice, QString set, QString currency, int rent)
+        : Property(id, name, purchasePrice, set, currency)
 {
     this->rent = rent;
     multiplier.push_back(1);
@@ -211,11 +250,24 @@ int Railway::returnRent()
     return 25 * multiplier.at(owner->propertiesInSetOwned(getSet()) - 1);
 }
 
+QString Railway::printDetails()
+{
+    QString s;
+    s = QString(
+              "1 Station:\t%1\n"
+              "2 Stations:\t%2\n"
+              "3 Stations:\t%3\n"
+              "4 Stations:\t%4\n");
+    for(QList<int>::const_iterator iter = multiplier.begin(); iter != multiplier.end(); iter++)
+    {
+        s = s.arg(currency + QString::number(25 * (*iter)));
+    }
+    return s;
+}
 
 
-
-Utility::Utility(int id, QString name, int purchasePrice, QString set, int rent) :
-        Property(id, name, purchasePrice, set)
+Utility::Utility(int id, QString name, int purchasePrice, QString set, QString currency, int rent) :
+        Property(id, name, purchasePrice, set, currency)
 {
     this->rent = rent;
 }
@@ -223,6 +275,8 @@ Utility::Utility(int id, QString name, int purchasePrice, QString set, int rent)
 
 int Utility::returnRent(int lastRoll)
 {
+    //XXX This assumes the multipler is 4 or 10, in newer version of the game
+    //it may be 4000 or 10000
     if(owner->propertiesInSetOwned(getSet()) == 1)
     {
         multiplier = 4;
@@ -235,5 +289,11 @@ int Utility::returnRent(int lastRoll)
 
 }
 
-
+QString Utility::printDetails()
+{
+    QString s = QString("If one Utility is owned rent is 4 times the amount on the dice."
+              "If both Utilities are owned rent is 10 times the amount on the dice."
+              "Mortgage Value: %1").arg(QString::number(this->purchasePrice / 2));
+    return s;
+}
 

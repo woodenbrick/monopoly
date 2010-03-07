@@ -3,9 +3,11 @@
 
 #include <QString>
 #include <QColor>
-#include <vector>
+#include <QPixmap>
+#include <QList>
 
 class Player;
+class Street;
 class HouseSet;
 
 class Square
@@ -14,15 +16,22 @@ protected:
     int id;
     QString name;
     QString set;
+    QPixmap image;
+    QColor bgColor;
+    QColor fgColor;
 
 public:
     Square(int id, QString &name, QString &set);
     int getId();
     QString getName();
     QString getSet();
+    Street* toStreet();
+    QPixmap getPixmap();
     bool isStreet();
     bool isEqual(Square* otherSquare);
-
+    QColor getBackgroundColor();
+    QColor getForegroundColor();
+    virtual QString printDetails();
 
 };
 
@@ -32,9 +41,10 @@ class Property : public Square
 protected:
     int purchasePrice;
     bool isMortgaged;
+    QString currency;
 
 public:
-    Property(int &id, QString &name, int &purchasePrice, QString &set);
+    Property(int &id, QString &name, int &purchasePrice, QString &set, QString currency);
     Player *owner;
     bool purchase(Player *player);
     void mortgage();
@@ -46,16 +56,14 @@ class HouseSet;
 class Street : public Property
 {
 protected:
-    std::vector <int> rent;
+    QList <int> rent;
     int houses;
     int houseCost;
-    QColor bgColor;
-    QColor fgColor;
     HouseSet *othersInSet;
 
 public:
     Street(int id, QString &name, int purchasePrice, QString &set,
-           std::vector <int> &rent, QString fgcolor, QString bgcolor);
+           QString currency, QList <int> &rent, QString bgcolor, QString fgcolor);
     bool buyHouses(int amount);
     void sellHouses(int amount);
     int getHouseCount();
@@ -63,17 +71,16 @@ public:
     int returnRent();
     HouseSet* getOthersInSet();
     void setOthersInSet(HouseSet *houseSet);
-    QColor getBackgroundColor();
-    QColor getForegroundColor();
+    QString printDetails();
 };
 
 class HouseSet
 {
-    std::vector<Street*> propSet;
+    QList<Street*> propSet;
     friend class Street;
 
 public:
-    HouseSet(std::vector<Street*> set);
+    HouseSet(QList<Street*> set);
     bool canAddHouse(Street *street);
     bool canRemoveHouse(Street *street);
 
@@ -82,10 +89,11 @@ public:
 class Railway : public Property
 {
     int rent;
-    std::vector<int> multiplier;
+    QList<int> multiplier;
 public:
-    Railway(int id, QString name, int purchasePrice, QString set, int rent);
+    Railway(int id, QString name, int purchasePrice, QString set, QString currency, int rent);
     int returnRent();
+    QString printDetails();
 };
 
 
@@ -95,8 +103,9 @@ class Utility : public Property
     int multiplier;
 
 public:
-    Utility(int id, QString name, int purchasePrice, QString set, int rent);
+    Utility(int id, QString name, int purchasePrice, QString set, QString currency, int rent);
     int returnRent(int lastRoll);
+    QString printDetails();
 };
 
 #endif // SQUARE_H
