@@ -32,8 +32,8 @@ int main(int argc, char* argv[])
     BoardGui *boardgui = new BoardGui(locale, board);
     boardgui->show();
 
-    Lobby *lobby= new Lobby;
-    lobby->show();
+    //Lobby *lobby= new Lobby;
+    //lobby->show();
     //int total = board->getCurrentPlayer()->dice->roll();
     //std::cout << total;
     //std::cout << board->getCurrentPlayer()->dice->getLastRollString().toStdString();
