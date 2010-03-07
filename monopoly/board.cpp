@@ -12,6 +12,7 @@ Settings::Settings(int cash, int goMoney, int superTax, QString currencySymbol)
     this->currencySymbol = currencySymbol;
 }
 
+
 int Settings::getCash()
 {
     return cash;
@@ -98,7 +99,8 @@ void BoardData::squareFactory()
             "LEFT OUTER JOIN property_colours ON squares.id = property_colours.ID");
     Square* sqrPtr;
     Street* ptyPtr;
-    std::vector<int> rents;
+    QList<int> rents;
+    QString currency = settings->getCurrencySymbol();
     //_set is one of None|B|LB|P|O|R|Y|G|DB|RR|UT
     while(query.next())
     {
@@ -112,12 +114,12 @@ void BoardData::squareFactory()
         else if(set == "RR")
         {
             sqrPtr = new Railway(id, name, query.value(2).toInt(),
-                              set, query.value(4).toInt());
+                              set, currency, query.value(4).toInt());
         }
         else if(set == "UT")
         {
             sqrPtr = new Utility(id, name, query.value(2).toInt(),
-                               set, query.value(4).toInt());
+                               set, currency, query.value(4).toInt());
         }
         else
         {
@@ -127,14 +129,14 @@ void BoardData::squareFactory()
                  rents.push_back(query.value(i).toInt());
              }
              sqrPtr = new Street(id, name, query.value(2).toInt(),
-                                set, rents, query.value(10).toString(),
+                                set, currency, rents, query.value(10).toString(),
                                 query.value(11).toString());
              ptyPtr = static_cast<Street*>(sqrPtr);
              streets.push_back(ptyPtr);
         }
         squares.push_back(sqrPtr);
     }
-    //give references to each street about other houses in its set
+    //give references to each street about other streets in its set
     for(unsigned int i=0; i < streets.size(); i++)
     {
         streets.at(i)->setOthersInSet(getSet(streets.at(i)));
@@ -151,7 +153,7 @@ Square* BoardData::getSquare(int id)
 HouseSet* BoardData::getSet(Street *thisStreet)
 {
     HouseSet* houseset;
-    std::vector<Street *> streetList;
+    QList<Street *> streetList;
     for(unsigned int i=0; i < streets.size(); i++)
     {
         if(streets.at(i)->getSet() == thisStreet->getSet() &&

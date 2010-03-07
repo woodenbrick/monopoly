@@ -11,12 +11,13 @@
 
 class Settings
 {
+
+
+public:
     int cash;
     int goMoney; //also income tax
     int superTax;
     QString currencySymbol;
-
-public:
     Settings(int cash, int goMoney, int superTax, QString currencySymbol);
     int getCash();
     int getGoMoney();
