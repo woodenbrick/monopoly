@@ -3,5 +3,6 @@
         <file>images/locale/UK/board.png</file>
         <file alias="boot">images/marker/boot.png</file>
         <file>images/TitleDeedTemp.png</file>
+        <file>images/TitleDeedBackTemp.png</file>
     </qresource>
 </RCC>
