@@ -1,0 +1,9 @@
+//    In the constructor, we call setupUi() to initialize the form.
+//    Thanks to multiple inheritance, we can access Ui::GoToCellDialog's members directly.
+//            After creating the user interface, setupUi() will also automatically connect
+//            any slots that follow the naming convention on_objectName_signalName() to
+//            the corresponding objectName's signalName() signal. In our example, this
+//            means that setupUi() will establish the following signal–slot connection:
+//
+//    connect(lineEdit, SIGNAL(textChanged(const QString &)),
+//            this, SLOT(on_lineEdit_textChanged()));
